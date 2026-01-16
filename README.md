@@ -24,6 +24,10 @@ All agents support the [Agent Skills](https://agentskills.io) open standard:
 | [Claude Code](https://claude.com/product/claude-code) | ✅     |
 | [Cursor](https://cursor.sh)                           | ✅     |
 | [GitHub Copilot](https://github.com/features/copilot) | ✅     |
+| [Gemini CLI](https://geminicli.com)                   | ✅     |
+| [Windsurf](https://windsurf.com)                      | ✅     |
+| [Trae](https://trae.ai)                               | ✅¹    |
+| [Factory Droid](https://factory.ai)                   | ✅     |
 | [OpenCode](https://opencode.ai)                       | ✅     |
 | [Codex](https://openai.com/codex)                     | ✅     |
 | [Antigravity](https://antigravity.google)             | ✅     |
@@ -31,6 +35,8 @@ All agents support the [Agent Skills](https://agentskills.io) open standard:
 | [Kilo Code](https://kilocode.ai)                      | ✅     |
 | [Roo Code](https://roocode.com)                       | ✅     |
 | [Goose](https://block.github.io/goose)                | ✅     |
+
+¹ Trae only supports project-level installation (SOLO mode). Global installation is not available.
 
 Missing an agent? [Create an issue](https://github.com/compilecafe/give-skill/issues)
 
@@ -122,6 +128,10 @@ npx give-skill https://github.com/org/repo/tree/main/skills/custom
 | Claude Code | `.claude/skills/<name>/`   |
 | Cursor      | `.cursor/skills/<name>/`   |
 | Copilot     | `.github/skills/<name>/`   |
+| Gemini CLI  | `.gemini/skills/<name>/`   |
+| Windsurf    | `.windsurf/skills/<name>/` |
+| Trae        | `.trae/skills/<name>/`     |
+| Factory Droid | `.factory/skills/<name>/`  |
 | OpenCode    | `.opencode/skill/<name>/`  |
 | Codex       | `.codex/skills/<name>/`    |
 | Antigravity | `.agent/skills/<name>/`    |
@@ -137,6 +147,10 @@ npx give-skill https://github.com/org/repo/tree/main/skills/custom
 | Claude Code | `~/.claude/skills/<name>/`             |
 | Cursor      | `~/.cursor/skills/<name>/`             |
 | Copilot     | `~/.copilot/skills/<name>/`            |
+| Gemini CLI  | `~/.gemini/skills/<name>/`             |
+| Windsurf    | `~/.codeium/windsurf/skills/<name>/`   |
+| Trae        | Project-level only (SOLO mode)         |
+| Factory Droid | `~/.factory/skills/<name>/`            |
 | OpenCode    | `~/.config/opencode/skill/<name>/`     |
 | Codex       | `~/.codex/skills/<name>/`              |
 | Antigravity | `~/.gemini/antigravity/skills/<name>/` |
@@ -187,6 +201,10 @@ The CLI automatically searches these paths in a repository:
 - `.claude/skills/`
 - `.cursor/skills/`
 - `.github/skills/`
+- `.gemini/skills/`
+- `.windsurf/skills/`
+- `.trae/skills/`
+- `.factory/skills/`
 - `.opencode/skill/`
 - `.codex/skills/`
 - `.agent/skills/`

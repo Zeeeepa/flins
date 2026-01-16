@@ -18,11 +18,11 @@ interface Options {
 
 program
   .name('give-skill')
-  .description('Install skills onto coding agents (OpenCode, Claude Code, Codex, Cursor, Antigravity, GitHub Copilot)')
+  .description('Install skills onto coding agents (Claude Code, Cursor, Copilot, Gemini, Windsurf, Trae, Factory, OpenCode, Codex, Antigravity, Amp, Kilo, Roo, Goose)')
   .version(version)
   .argument('<source>', 'Git repo URL, GitHub shorthand (owner/repo), or direct path to skill')
   .option('-g, --global', 'Install skill globally (user-level) instead of project-level')
-  .option('-a, --agent <agents...>', 'Specify agents to install to (opencode, claude-code, codex, cursor, copilot)')
+  .option('-a, --agent <agents...>', 'Specify agents to install to (windsurf, gemini, claude-code, cursor, copilot, etc.)')
   .option('-s, --skill <skills...>', 'Specify skill names to install (skip selection prompt)')
   .option('-l, --list', 'List available skills in the repository without installing')
   .option('-y, --yes', 'Skip confirmation prompts')

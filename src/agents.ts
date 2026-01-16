@@ -96,6 +96,42 @@ export const agents: Record<AgentType, AgentConfig> = {
       return existsSync(join(home, '.copilot'));
     },
   },
+  gemini: {
+    name: 'gemini',
+    displayName: 'Gemini CLI',
+    skillsDir: '.gemini/skills',
+    globalSkillsDir: join(home, '.gemini/skills'),
+    detectInstalled: async () => {
+      return existsSync(join(home, '.gemini'));
+    },
+  },
+  windsurf: {
+    name: 'windsurf',
+    displayName: 'Windsurf',
+    skillsDir: '.windsurf/skills',
+    globalSkillsDir: join(home, '.codeium/windsurf/skills'),
+    detectInstalled: async () => {
+      return existsSync(join(home, '.codeium/windsurf'));
+    },
+  },
+  trae: {
+    name: 'trae',
+    displayName: 'Trae',
+    skillsDir: '.trae/skills',
+    globalSkillsDir: join(home, '.trae/skills'),
+    detectInstalled: async () => {
+      return existsSync(join(home, '.trae'));
+    },
+  },
+  factory: {
+    name: 'factory',
+    displayName: 'Factory Droid',
+    skillsDir: '.factory/skills',
+    globalSkillsDir: join(home, '.factory/skills'),
+    detectInstalled: async () => {
+      return existsSync(join(home, '.factory'));
+    },
+  },
 };
 
 export async function detectInstalledAgents(): Promise<AgentType[]> {
