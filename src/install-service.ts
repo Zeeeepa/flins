@@ -1,10 +1,11 @@
 import * as p from '@clack/prompts';
 import pc from 'picocolors';
-import { parseSource, cloneRepo, cleanupTempDir } from './git.js';
+import { parseSource, cloneRepo, cleanupTempDir, getCommitHash } from './git.js';
 import { discoverSkills, getSkillDisplayName } from './skills.js';
 import { installSkillForAgent, isSkillInstalled, getInstallPath } from './installer.js';
 import { detectInstalledAgents, agents } from './agents.js';
-import type { Skill, AgentType } from './types.js';
+import { addSkill } from './state.js';
+import type { Skill, AgentType, ParsedSource } from './types.js';
 
 interface Options {
   global?: boolean;
@@ -38,11 +39,14 @@ export async function performInstallation(
   try {
     context.spinner.start('Parsing source...');
     const parsed = parseSource(source);
-    context.spinner.stop(`Source: ${pc.cyan(parsed.url)}${parsed.subpath ? ` (${parsed.subpath})` : ''}`);
+    const branch = parsed.branch ?? 'main';
+    context.spinner.stop(`Source: ${pc.cyan(parsed.url)}${parsed.subpath ? ` (${parsed.subpath})` : ''}${parsed.branch ? ` @ ${pc.cyan(parsed.branch)}` : ''}`);
 
     context.spinner.start('Cloning repository...');
-    context.tempDir = await cloneRepo(parsed.url);
+    context.tempDir = await cloneRepo(parsed.url, parsed.branch);
     context.spinner.stop('Repository cloned');
+
+    const commit = await getCommitHash(context.tempDir);
 
     context.spinner.start('Discovering skills...');
     const skills = await discoverSkills(context.tempDir, parsed.subpath);
@@ -88,7 +92,14 @@ export async function performInstallation(
     }
 
     context.spinner.start('Installing skills...');
-    const results = await performParallelInstall(selectedSkills, targetAgents, installGlobally);
+    const results = await performParallelInstall(
+      selectedSkills,
+      targetAgents,
+      installGlobally,
+      parsed,
+      commit,
+      branch
+    );
     context.spinner.stop('Installation complete');
 
     return results;
@@ -294,7 +305,10 @@ async function showSummaryAndConfirm(
 async function performParallelInstall(
   selectedSkills: Skill[],
   targetAgents: AgentType[],
-  installGlobally: boolean
+  installGlobally: boolean,
+  parsed: ParsedSource,
+  commit: string,
+  branch: string
 ): Promise<InstallResult> {
   const installPromises = selectedSkills.flatMap(skill =>
     targetAgents.map(agent => installSkillForAgent(skill, agent, { global: installGlobally }))
@@ -315,11 +329,51 @@ async function performParallelInstall(
     };
   });
 
+  const branchChanges = new Map<string, { previous: string; current: string }>();
+
+  for (const [i, result] of installResults.entries()) {
+    if (result.success) {
+      const skillIndex = Math.floor(i / targetAgents.length);
+      const agentIndex = i % targetAgents.length;
+      const skill = selectedSkills[skillIndex]!;
+      const agent = targetAgents[agentIndex]!;
+
+      const addResult = addSkill(
+        skill.name,
+        parsed.url,
+        parsed.subpath,
+        branch,
+        commit,
+        {
+          agent,
+          type: installGlobally ? 'global' : 'project',
+          path: result.originalPath,
+        }
+      );
+
+      if (addResult.updated && addResult.previousBranch) {
+        const existing = branchChanges.get(skill.name);
+        branchChanges.set(skill.name, {
+          previous: existing?.previous ?? addResult.previousBranch,
+          current: existing?.current ?? branch,
+        });
+      }
+    }
+  }
+
   console.log();
   const successful = results.filter(r => r.success);
   const failed = results.filter(r => !r.success);
 
+  if (branchChanges.size > 0) {
+    console.log();
+    for (const [skillName, { previous, current }] of branchChanges) {
+      p.log.warn(pc.yellow(`  ${pc.cyan(skillName)}: ${pc.dim(previous)} → ${pc.green(current)}`));
+    }
+  }
+
   if (successful.length > 0) {
+    console.log();
     p.log.success(pc.green(`Successfully installed ${successful.length} skill${successful.length !== 1 ? 's' : ''}`));
     for (const r of successful) {
       p.log.message(`  ${pc.green('✓')} ${r.skill} → ${r.agent}`);

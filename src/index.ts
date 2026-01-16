@@ -4,6 +4,8 @@ import { program } from 'commander';
 import * as p from '@clack/prompts';
 import pc from 'picocolors';
 import { performInstallation } from './install-service.js';
+import { performUpdate, checkStatus, displayStatus, cleanOrphaned as cleanOrphanedService } from './update-service.js';
+import { performRemove, listRemovableSkills } from './remove-service.js';
 import packageJson from '../package.json' with { type: 'json' };
 
 const version = packageJson.version;
@@ -14,6 +16,16 @@ interface Options {
   yes?: boolean;
   skill?: string[];
   list?: boolean;
+}
+
+interface UpdateOptions {
+  yes?: boolean;
+}
+
+interface RemoveOptions {
+  global?: boolean;
+  agent?: string[];
+  yes?: boolean;
 }
 
 program
@@ -28,6 +40,45 @@ program
   .option('-y, --yes', 'Skip confirmation prompts')
   .action(async (source: string, options: Options) => {
     await main(source, options);
+  });
+
+program
+  .command('update [skills...]')
+  .description('Update installed skills to their latest versions')
+  .option('-y, --yes', 'Skip confirmation prompts')
+  .action(async (skills: string[], options: UpdateOptions) => {
+    await updateCommand(skills, options);
+  });
+
+program
+  .command('status [skills...]')
+  .description('Check status of installed skills (updates available, orphaned, etc.)')
+  .action(async (skills: string[]) => {
+    await statusCommand(skills);
+  });
+
+program
+  .command('remove [skills...]')
+  .description('Remove installed skills')
+  .option('-g, --global', 'Remove from global location only')
+  .option('-a, --agent <agents...>', 'Remove from specific agents only')
+  .option('-y, --yes', 'Skip confirmation prompts')
+  .action(async (skills: string[], options: RemoveOptions) => {
+    await removeCommand(skills, options);
+  });
+
+program
+  .command('list')
+  .description('List all installed skills')
+  .action(async () => {
+    await listCommand();
+  });
+
+program
+  .command('clean')
+  .description('Remove orphaned skill entries from state')
+  .action(async () => {
+    await cleanCommand();
   });
 
 program.parse();
@@ -49,6 +100,76 @@ async function main(source: string, options: Options) {
   } catch (error) {
     p.log.error(error instanceof Error ? error.message : 'Unknown error occurred');
     p.outro(pc.red('Installation failed'));
+    process.exit(1);
+  }
+}
+
+async function updateCommand(skills: string[], options: UpdateOptions) {
+  console.log();
+  p.intro(pc.bgCyan(pc.black(' give-skill ')));
+
+  try {
+    await performUpdate(skills.length > 0 ? skills : undefined, options);
+  } catch (error) {
+    p.log.error(error instanceof Error ? error.message : 'Unknown error occurred');
+    p.outro(pc.red('Update failed'));
+    process.exit(1);
+  }
+}
+
+async function statusCommand(skills: string[]) {
+  console.log();
+  p.intro(pc.bgCyan(pc.black(' give-skill ')));
+
+  try {
+    const results = await checkStatus(skills.length > 0 ? skills : undefined);
+    await displayStatus(results);
+    p.outro('Done!');
+  } catch (error) {
+    p.log.error(error instanceof Error ? error.message : 'Unknown error occurred');
+    p.outro(pc.red('Status check failed'));
+    process.exit(1);
+  }
+}
+
+async function removeCommand(skills: string[], options: RemoveOptions) {
+  console.log();
+  p.intro(pc.bgCyan(pc.black(' give-skill ')));
+
+  try {
+    await performRemove(skills, options);
+  } catch (error) {
+    p.log.error(error instanceof Error ? error.message : 'Unknown error occurred');
+    p.outro(pc.red('Remove failed'));
+    process.exit(1);
+  }
+}
+
+async function listCommand() {
+  console.log();
+  p.intro(pc.bgCyan(pc.black(' give-skill ')));
+
+  try {
+    await listRemovableSkills();
+    p.outro('Done!');
+  } catch (error) {
+    p.log.error(error instanceof Error ? error.message : 'Unknown error occurred');
+    p.outro(pc.red('List failed'));
+    process.exit(1);
+  }
+}
+
+async function cleanCommand() {
+  console.log();
+  p.intro(pc.bgCyan(pc.black(' give-skill ')));
+
+  try {
+    await cleanOrphanedService();
+    console.log();
+    p.outro(pc.green('Done!'));
+  } catch (error) {
+    p.log.error(error instanceof Error ? error.message : 'Unknown error occurred');
+    p.outro(pc.red('Clean failed'));
     process.exit(1);
   }
 }
