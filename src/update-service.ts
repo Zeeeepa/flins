@@ -4,7 +4,15 @@ import { join } from 'path';
 import { cloneRepo, cleanupTempDir, getLatestCommit, getCommitHash } from './git.js';
 import { discoverSkills } from './skills.js';
 import { installSkillForAgent } from './installer.js';
-import { getAllSkills, updateSkillCommit, removeSkillInstallation, cleanOrphanedEntries } from './state.js';
+import {
+  getAllSkills,
+  getAllLocalSkills,
+  findLocalSkillInstallations,
+  updateSkillCommit,
+  updateLocalSkillCommit,
+  removeSkillInstallation,
+  cleanOrphanedEntries
+} from './state.js';
 import { agents } from './agents.js';
 import { isValidSkillInstallation, resolveInstallationPath, showNoSkillsMessage, Plural } from './utils.js';
 import type { SkillState } from './types.js';
@@ -24,7 +32,42 @@ interface UpdateResult {
   updated: number;
   failed: number;
   error?: string;
-};
+}
+
+function getAllSkillsFromBothSources(): Array<{ skillName: string; state: SkillState; isLocal: boolean }> {
+  const result: Array<{ skillName: string; state: SkillState; isLocal: boolean }> = [];
+  const seen = new Set<string>();
+
+  const localState = getAllLocalSkills();
+  if (localState) {
+    for (const [skillName, localEntry] of Object.entries(localState.skills)) {
+      const installations = findLocalSkillInstallations(skillName);
+      result.push({
+        skillName,
+        state: {
+          ...localEntry,
+          installations,
+        },
+        isLocal: true,
+      });
+      seen.add(skillName.toLowerCase());
+    }
+  }
+
+  const globalState = getAllSkills();
+  for (const [skillName, skillState] of Object.entries(globalState.skills)) {
+    const key = skillName.toLowerCase();
+    if (!seen.has(key)) {
+      result.push({
+        skillName,
+        state: skillState,
+        isLocal: false,
+      });
+    }
+  }
+
+  return result;
+}
 
 async function checkSkillUpdate(skillName: string, skillState: SkillState): Promise<StatusResult> {
   const installations = skillState.installations.map(inst => {
@@ -71,13 +114,8 @@ async function checkSkillUpdate(skillName: string, skillState: SkillState): Prom
 }
 
 export async function checkStatus(skillNames?: string[]): Promise<StatusResult[]> {
-  const state = getAllSkills();
+  const allSkills = getAllSkillsFromBothSources();
   const results: StatusResult[] = [];
-
-  const allSkills = Object.entries(state.skills).map(([skillName, skillState]) => ({
-    skillName,
-    state: skillState,
-  }));
 
   let skillsToCheck: typeof allSkills;
 
@@ -113,13 +151,8 @@ export async function checkStatus(skillNames?: string[]): Promise<StatusResult[]
 }
 
 export async function performUpdate(skillNames?: string[], options: { yes?: boolean } = {}): Promise<UpdateResult[]> {
-  const state = getAllSkills();
+  const allSkills = getAllSkillsFromBothSources();
   const results: UpdateResult[] = [];
-
-  const allSkills = Object.entries(state.skills).map(([skillName, skillState]) => ({
-    skillName,
-    state: skillState,
-  }));
 
   let skillsToUpdate: typeof allSkills;
 
@@ -198,7 +231,7 @@ export async function performUpdate(skillNames?: string[], options: { yes?: bool
   const spinner = p.spinner();
   spinner.start(`Updating ${selectedToUpdate.length} ${Plural(selectedToUpdate.length, 'skill')}...`);
 
-  for (const { skillName, state: skillState } of skillsToUpdate) {
+  for (const { skillName, state: skillState, isLocal } of skillsToUpdate) {
     const statusResult = statusResults.find(r => r.skillName === skillName);
 
     if (!statusResult || statusResult.status !== 'update-available') {
@@ -234,7 +267,9 @@ export async function performUpdate(skillNames?: string[], options: { yes?: bool
       for (const installation of skillState.installations) {
         const resolvedPath = resolveInstallationPath(installation);
         if (!isValidSkillInstallation(resolvedPath)) {
-          removeSkillInstallation(skillName, installation.agent, installation.path);
+          if (!isLocal) {
+            removeSkillInstallation(skillName, installation.agent, installation.path);
+          }
           continue;
         }
 
@@ -249,7 +284,11 @@ export async function performUpdate(skillNames?: string[], options: { yes?: bool
         }
       }
 
-      updateSkillCommit(skillName, commit);
+      if (isLocal) {
+        updateLocalSkillCommit(skillName, commit);
+      } else {
+        updateSkillCommit(skillName, commit);
+      }
 
       results.push({
         skillName,

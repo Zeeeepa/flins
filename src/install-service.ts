@@ -4,7 +4,7 @@ import { parseSource, cloneRepo, cleanupTempDir, getCommitHash } from './git.js'
 import { discoverSkills, getSkillDisplayName } from './skills.js';
 import { installSkillForAgent, isSkillInstalled, getInstallPath } from './installer.js';
 import { detectInstalledAgents, agents } from './agents.js';
-import { addSkill } from './state.js';
+import { addSkill, addLocalSkill } from './state.js';
 import type { Skill, AgentType, ParsedSource } from './types.js';
 
 interface Options {
@@ -328,23 +328,21 @@ async function performParallelInstall(
   const branchChanges = new Map<string, { previous: string; current: string }>();
 
   for (const [i, result] of installResults.entries()) {
-    if (result.success) {
-      const skillIndex = Math.floor(i / targetAgents.length);
-      const agentIndex = i % targetAgents.length;
-      const skill = selectedSkills[skillIndex]!;
-      const agent = targetAgents[agentIndex]!;
+    if (!result.success) continue;
 
+    const skillIndex = Math.floor(i / targetAgents.length);
+    const agentIndex = i % targetAgents.length;
+    const skill = selectedSkills[skillIndex]!;
+    const agent = targetAgents[agentIndex]!;
+
+    if (installGlobally) {
       const addResult = addSkill(
         skill.name,
         parsed.url,
         parsed.subpath,
         branch,
         commit,
-        {
-          agent,
-          type: installGlobally ? 'global' : 'project',
-          path: result.originalPath,
-        }
+        { agent, type: 'global', path: result.originalPath }
       );
 
       if (addResult.updated && addResult.previousBranch) {
@@ -354,6 +352,12 @@ async function performParallelInstall(
           current: existing?.current ?? branch,
         });
       }
+    }
+  }
+
+  if (!installGlobally) {
+    for (const skill of selectedSkills) {
+      addLocalSkill(skill.name, parsed.url, parsed.subpath, branch, commit);
     }
   }
 

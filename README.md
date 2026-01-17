@@ -69,7 +69,7 @@ npx give-skill https://github.com/expo/skills
 # Install to specific agent
 npx give-skill expo/skills -a copilot
 
-# Install globally (available in all projects)
+# Install globally (available across all projects)
 npx give-skill expo/skills --global
 
 # List available skills first
@@ -288,43 +288,25 @@ If a folder matches an agent's skill directory, the CLI will find it.
 
 ## State Management
 
-`give-skill` stores installation state in `~/.give-skill/state.json`. This enables:
+`give-skill` tracks installed skills for version control and updates:
 
-- **Update tracking**: Know when skills have updates available
-- **Source tracking**: Remember where each skill came from
-- **Batch operations**: Update all skills without re-specifying sources
-- **Branch tracking**: Remember which branch was used for installation
-
-**Important**: State tracking only works for skills installed via `give-skill`. Manually installed skills are not tracked.
-
-The state file contains:
+- **Local**: `skills.lock` in project directory (commit to git for team consistency)
+- **Global**: `~/.give-skill/state.json` for machine-wide installations
 
 ```json
 {
-  "lastUpdate": "2025-01-16T10:00:00Z",
+  "version": "1.0.0",
   "skills": {
     "pr-reviewer": {
-      "source": "https://github.com/expo/skills.git",
       "url": "https://github.com/expo/skills.git",
       "branch": "main",
-      "commit": "abc123...",
-      "subpath": "skills/.curated",
-      "installedAt": "2025-01-15T10:00:00Z",
-      "installations": [
-        {
-          "agent": "claude-code",
-          "type": "global",
-          "path": "~/.claude/skills/pr-reviewer"
-        }
-      ]
+      "commit": "abc123..."
     }
   }
 }
 ```
 
-Skills are stored by name (lowercased). If you install a skill with the same name from a different source, it will overwrite the existing entry after confirmation.
-
-If you manually delete skill folders, run `npx give-skill clean` to remove orphaned entries.
+Commit `skills.lock` to ensure consistent skill versions across your team. New contributors can run `give-skill update` to synchronize.
 
 ## Troubleshooting
 

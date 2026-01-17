@@ -29,16 +29,31 @@ export interface SkillInstallation {
 }
 
 export interface SkillState {
-  source: string;
   url: string;
   subpath?: string;
   branch: string;
   commit: string;
-  installedAt: string;
   installations: SkillInstallation[];
 }
 
 export interface StateFile {
   lastUpdate: string;
   skills: Record<string, SkillState>;
+}
+
+export interface LocalSkillEntry {
+  url: string;
+  subpath?: string;
+  branch: string;
+  commit: string;
+}
+
+export interface LocalState {
+  version: string;
+  skills: Record<string, LocalSkillEntry>;
+}
+
+export interface Dirent {
+  name: string;
+  isDirectory(): boolean;
 }
