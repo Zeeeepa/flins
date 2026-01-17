@@ -1,0 +1,92 @@
+{
+  "opencode": {
+    "name": "opencode",
+    "displayName": "OpenCode",
+    "skillsDir": ".opencode/skill",
+    "globalSkillsDir": "~/.config/opencode/skill"
+  },
+  "claude-code": {
+    "name": "claude-code",
+    "displayName": "Claude Code",
+    "skillsDir": ".claude/skills",
+    "globalSkillsDir": "~/.claude/skills"
+  },
+  "codex": {
+    "name": "codex",
+    "displayName": "Codex",
+    "skillsDir": ".codex/skills",
+    "globalSkillsDir": "~/.codex/skills"
+  },
+  "cursor": {
+    "name": "cursor",
+    "displayName": "Cursor",
+    "skillsDir": ".cursor/skills",
+    "globalSkillsDir": "~/.cursor/skills"
+  },
+  "amp": {
+    "name": "amp",
+    "displayName": "Amp",
+    "skillsDir": ".agents/skills",
+    "globalSkillsDir": "~/.config/agents/skills"
+  },
+  "kilo": {
+    "name": "kilo",
+    "displayName": "Kilo Code",
+    "skillsDir": ".kilocode/skills",
+    "globalSkillsDir": "~/.kilocode/skills"
+  },
+  "roo": {
+    "name": "roo",
+    "displayName": "Roo Code",
+    "skillsDir": ".roo/skills",
+    "globalSkillsDir": "~/.roo/skills"
+  },
+  "goose": {
+    "name": "goose",
+    "displayName": "Goose",
+    "skillsDir": ".goose/skills",
+    "globalSkillsDir": "~/.config/goose/skills"
+  },
+  "antigravity": {
+    "name": "antigravity",
+    "displayName": "Antigravity",
+    "skillsDir": ".agent/skills",
+    "globalSkillsDir": "~/.gemini/antigravity/skills"
+  },
+  "copilot": {
+    "name": "copilot",
+    "displayName": "GitHub Copilot",
+    "skillsDir": ".github/skills",
+    "globalSkillsDir": "~/.copilot/skills"
+  },
+  "gemini": {
+    "name": "gemini",
+    "displayName": "Gemini CLI",
+    "skillsDir": ".gemini/skills",
+    "globalSkillsDir": "~/.gemini/skills"
+  },
+  "windsurf": {
+    "name": "windsurf",
+    "displayName": "Windsurf",
+    "skillsDir": ".windsurf/skills",
+    "globalSkillsDir": "~/.codeium/windsurf/skills"
+  },
+  "trae": {
+    "name": "trae",
+    "displayName": "Trae",
+    "skillsDir": ".trae/skills",
+    "globalSkillsDir": "~/.trae/skills"
+  },
+  "factory": {
+    "name": "factory",
+    "displayName": "Factory Droid",
+    "skillsDir": ".factory/skills",
+    "globalSkillsDir": "~/.factory/skills"
+  },
+  "letta": {
+    "name": "letta",
+    "displayName": "Letta",
+    "skillsDir": ".skills",
+    "globalSkillsDir": "~/.letta/skills"
+  }
+}

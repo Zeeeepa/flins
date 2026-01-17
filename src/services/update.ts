@@ -1,9 +1,9 @@
 import * as p from '@clack/prompts';
 import pc from 'picocolors';
 import { join } from 'path';
-import { cloneRepo, cleanupTempDir, getLatestCommit, getCommitHash } from './git.js';
-import { discoverSkills } from './skills.js';
-import { installSkillForAgent } from './installer.js';
+import { cloneRepo, cleanupTempDir, getLatestCommit, getCommitHash } from '../git.js';
+import { discoverSkills } from '../core/skills/index.js';
+import { installSkillForAgent } from '../installer.js';
 import {
   getAllSkills,
   getAllLocalSkills,
@@ -12,10 +12,10 @@ import {
   updateLocalSkillCommit,
   removeSkillInstallation,
   cleanOrphanedEntries
-} from './state.js';
-import { agents } from './agents.js';
-import { isValidSkillInstallation, resolveInstallationPath, showNoSkillsMessage, Plural } from './utils.js';
-import type { SkillState } from './types.js';
+} from '../core/state/index.js';
+import { agents } from '../core/agents/index.js';
+import { isValidSkillInstallation, resolveInstallationPath, showNoSkillsMessage, Plural } from '../utils.js';
+import type { SkillState } from '../types/index.js';
 
 interface StatusResult {
   skillName: string;
