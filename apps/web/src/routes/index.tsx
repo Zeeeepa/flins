@@ -33,6 +33,7 @@ import { zodValidator } from '@tanstack/zod-adapter'
 import { z } from 'zod'
 import { Tooltip, TooltipPopup, TooltipTrigger } from '@/components/ui/tooltip'
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
+import { Card, CardPanel } from '@/components/ui/card'
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -244,20 +245,26 @@ function App() {
                 tools from one unified interface
               </p>
             </div>
-            <div className="border bg-muted/30 p-4 rounded-lg">
-              <p className="text-muted-foreground mb-2">
-                Quick install from curated list:
-              </p>
-              <code className="text-sm">sena add expo</code>
-              <p className="text-muted-foreground mt-3 mb-2">
-                Or from any git repository:
-              </p>
-              <div className="flex flex-col gap-1">
-                <code className="text-sm">sena add github.com/user/repo</code>
-                <code className="text-sm">sena add gitlab.com/org/skills</code>
-                <code className="text-sm">sena add any-git-host.com/repo</code>
-              </div>
-            </div>
+            <Card>
+              <CardPanel>
+                <p className="text-muted-foreground mb-2">
+                  Quick install from curated list:
+                </p>
+                <code className="text-sm">sena add expo</code>
+                <p className="text-muted-foreground mt-3 mb-2">
+                  Or from any git repository:
+                </p>
+                <div className="flex flex-col gap-1">
+                  <code className="text-sm">sena add github.com/user/repo</code>
+                  <code className="text-sm">
+                    sena add gitlab.com/org/skills
+                  </code>
+                  <code className="text-sm">
+                    sena add any-git-host.com/repo
+                  </code>
+                </div>
+              </CardPanel>
+            </Card>
           </div>
 
           <InputGroup className="mt-6 mb-8">
