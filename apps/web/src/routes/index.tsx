@@ -40,7 +40,7 @@ export const Route = createFileRoute('/')({
     tags,
     authors,
   }),
-  loader: ({ deps: { search, tags, authors } }) => {
+  loader: async ({ deps: { search, tags, authors } }) => {
     let skills = directory
 
     if (search) {
@@ -72,6 +72,99 @@ export const Route = createFileRoute('/')({
       searchParams: { search, tags, authors },
     }
   },
+  head: () => ({
+    meta: [
+      { title: 'sena · Universal Skill Installer for AI Coding Agents' },
+      {
+        name: 'description',
+        content:
+          'Discover and install skills for Claude Code, Cursor, Copilot, Gemini, Windsurf, Trae, Factory, Letta, and 10+ more AI coding agents. One universal installer for all your AI development tools.',
+      },
+      // Open Graph
+      {
+        property: 'og:title',
+        content: 'sena · Universal Skill Installer for AI Coding Agents',
+      },
+      {
+        property: 'og:description',
+        content:
+          'Install skills across 16+ AI coding agents from one unified interface. Boost your AI productivity with custom skills.',
+      },
+      { property: 'og:type', content: 'website' },
+      { property: 'og:url', content: 'https://sena.website' },
+      { property: 'og:image', content: 'https://sena.website/og-image.png' },
+      { property: 'og:site_name', content: 'sena' },
+      // Twitter Card
+      { name: 'twitter:card', content: 'summary_large_image' },
+      {
+        name: 'twitter:title',
+        content: 'sena · Universal Skill Installer for AI Coding Agents',
+      },
+      {
+        name: 'twitter:description',
+        content:
+          'Install skills across 16+ AI coding agents. One installer for Claude Code, Cursor, Copilot, Gemini, and more.',
+      },
+      {
+        name: 'twitter:image',
+        content: 'https://sena.website/twitter-image.png',
+      },
+      // Additional SEO
+      {
+        name: 'keywords',
+        content:
+          'AI coding agents, Claude Code skills, Cursor skills, Copilot skills, AI developer tools, code assistant, AI skills marketplace, Windsurf skills, Gemini Code Assistant',
+      },
+      { name: 'author', content: 'compilecafe' },
+      { name: 'robots', content: 'index, follow' },
+    ],
+    links: [
+      {
+        rel: 'canonical',
+        href: 'https://sena.website',
+      },
+    ],
+    scripts: [
+      {
+        type: 'application/ld+json',
+        children: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'SoftwareApplication',
+          name: 'sena',
+          description:
+            'Universal skill installer for AI coding agents. Install, manage, and update custom skills across Claude Code, Cursor, Copilot, Gemini, Windsurf, and 12+ more AI development tools.',
+          url: 'https://sena.website',
+          applicationCategory: 'DeveloperApplication',
+          operatingSystem: 'macOS, Linux, Windows',
+          offers: {
+            '@type': 'Offer',
+            price: '0',
+            priceCurrency: 'USD',
+          },
+          author: {
+            '@type': 'Organization',
+            name: 'compilecafe',
+            url: 'https://github.com/compilecafe',
+          },
+          keywords: [
+            'AI',
+            'coding agents',
+            'skills',
+            'Claude Code',
+            'Cursor',
+            'Copilot',
+            'developer tools',
+            'CLI',
+          ],
+          aggregates: {
+            '@type': 'AggregateRating',
+            ratingValue: '5',
+            ratingCount: '1',
+          },
+        }),
+      },
+    ],
+  }),
 })
 
 function App() {
@@ -125,7 +218,9 @@ function App() {
 
           <div className="flex flex-col">
             <h1 className="text-2xl font-bold">Supercharge your coding AI</h1>
-            <p>Discover skills from any git repository for universal coding AI agents</p>
+            <p>
+              Discover skills from any git repository for any coding AI agents
+            </p>
           </div>
 
           <InputGroup className="mt-6 mb-8">
