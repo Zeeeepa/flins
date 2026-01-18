@@ -1,193 +1,221 @@
 <div align="center">
 
-# give-skill
+# flins
 
-**Universal skill installer for AI coding agents**
+**Universal skill package manager for AI coding agents**
 
-One CLI to install agent skills across all your coding assistants.
+Install, manage, and update skills across 15+ AI development tools from a single unified interface.
 
-[![npm version](https://badge.fury.io/js/give-skill.svg)](https://www.npmjs.org/package/give-skill)
+[![npm version](https://badge.fury.io/js/flins.svg)](https://www.npmjs.org/package/flins)
 [![Agent Skills](https://img.shields.io/badge/Agent_Skills-standard-blue)](https://agentskills.io)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 </div>
 
-## Why give-skill?
+> **Note:** flins is actively evolving alongside the [Agent Skills](https://agentskills.io) format and the AI agent ecosystem. Your feedback helps shape future releases.
 
-The [Agent Skills](https://agentskills.io) format is an open standard for extending AI agents with new capabilities. `give-skill` lets you install skills from any git repository to all your skill-compatible agents in one command.
+## Overview
 
-### Supported Agents
+**flins** is an open-source CLI that provides a unified interface for managing agent skills across all skill-compatible coding assistants. Inspired by package managers like `pnpm`, flins follows a familiar command pattern while working seamlessly with the [Agent Skills](https://agentskills.io) open standard.
 
-All agents support the [Agent Skills](https://agentskills.io) open standard:
+## Supported Agents
 
-| Agent                                                 | Status |
-| ----------------------------------------------------- | ------ |
-| [Claude Code](https://claude.com/product/claude-code) | ✅     |
-| [Cursor](https://cursor.sh)                           | ✅     |
-| [GitHub Copilot](https://github.com/features/copilot) | ✅     |
-| [Gemini CLI](https://geminicli.com)                   | ✅     |
-| [Windsurf](https://windsurf.com)                      | ✅     |
-| [Trae](https://trae.ai)                               | ✅¹    |
-| [Factory Droid](https://factory.ai)                   | ✅     |
-| [Letta](https://www.letta.com)                        | ✅     |
-| [OpenCode](https://opencode.ai)                       | ✅     |
-| [Codex](https://openai.com/codex)                     | ✅     |
-| [Antigravity](https://antigravity.google)             | ✅     |
-| [Amp](http://ampcode.com)                             | ✅     |
-| [Kilo Code](https://kilocode.ai)                      | ✅     |
-| [Roo Code](https://roocode.com)                       | ✅     |
-| [Goose](https://block.github.io/goose)                | ✅     |
-| [Qoder](https://qoder.com)                            | ✅     |
+All agents support the Agent Skills open standard:
 
-> [!NOTE]
-> ¹ Trae only supports project-level installation (SOLO mode). Global installation is not available.
+| Agent                                                         | Status | Notes                            |
+| ------------------------------------------------------------- | ------ | -------------------------------- |
+| ![Claude Code](https://img.shields.io/badge/Claude_Code-blue) | ✅     | Full support (skills + commands) |
+| ![Cursor](https://img.shields.io/badge/Cursor-green)          | ✅     | Full support                     |
+| ![GitHub Copilot](https://img.shields.io/badge/Copilot-black) | ✅     | Full support                     |
+| ![Gemini CLI](https://img.shields.io/badge/Gemini-blue)       | ✅     | Full support                     |
+| ![Windsurf](https://img.shields.io/badge/Windsurf-cyan)       | ✅     | Full support                     |
+| ![Trae](https://img.shields.io/badge/Trae-purple)             | ✅     | Project-level only (SOLO mode)   |
+| ![Factory Droid](https://img.shields.io/badge/Factory-orange) | ✅     | Full support (skills + commands) |
+| ![Letta](https://img.shields.io/badge/Letta-teal)             | ✅     | Full support                     |
+| ![OpenCode](https://img.shields.io/badge/OpenCode-indigo)     | ✅     | Full support (skills + commands) |
+| ![Codex](https://img.shields.io/badge/Codex-green)            | ✅     | Full support                     |
+| ![Antigravity](https://img.shields.io/badge/Antigravity-red)  | ✅     | Full support                     |
+| ![Amp](https://img.shields.io/badge/Amp-yellow)               | ✅     | Full support                     |
+| ![Kilo Code](https://img.shields.io/badge/Kilo_Code-blue)     | ✅     | Full support                     |
+| ![Roo Code](https://img.shields.io/badge/Roo_Code-orange)     | ✅     | Full support                     |
+| ![Goose](https://img.shields.io/badge/Goose-gray)             | ✅     | Full support                     |
+| ![Qoder](https://img.shields.io/badge/Qoder-pink)             | ✅     | Full support                     |
 
-Missing an agent? [Create an issue](https://github.com/compilecafe/give-skill/issues)
+Missing an agent? [Create an issue](https://github.com/flinstech/flins/issues)
 
 ## Installation
 
 ```bash
-# Using npx
-npx give-skill <repo>
+# Using npx (recommended)
+npx flins add <source>
 
 # Using bunx
-bunx give-skill <repo>
+bunx flins add <source>
 
-# Or install globally
-npm install -g give-skill
-give-skill <repo>
+# Install globally
+npm install -g flins
+flins add <source>
 ```
 
 ## Quick Start
 
-Install skills from any git repository:
+### Install from Directory
 
 ```bash
-# Install from GitHub (shorthand)
-npx give-skill expo/skills
-
-# Install from full URL
-npx give-skill https://github.com/expo/skills
+# Install a skill by name from the flins directory
+flins add better-auth
 
 # Install to specific agent
-npx give-skill expo/skills -a copilot
+flins add expo -a claude-code
 
 # Install globally (available across all projects)
-npx give-skill expo/skills --global
-
-# List available skills first
-npx give-skill expo/skills --list
+flins add expo --global
 ```
 
-## Managing Skills
-
-`give-skill` tracks installed skills and makes it easy to manage them.
+### Search & Browse
 
 ```bash
-# List all installed skills
-npx give-skill list
-
-# Check status of all installed skills (compact view)
-npx give-skill status
-
-# Check status with detailed information
-npx give-skill status --verbose
-
-# Check status of specific skills (automatically shows details)
-npx give-skill status pr-reviewer test-generator
-
-# Update all skills with available updates (interactive selection)
-npx give-skill update
-
-# Update specific skills
-npx give-skill update pr-reviewer test-generator
-
-# Update without confirmation (auto-selects all with updates)
-npx give-skill update -y
-
-# Remove specific skills
-npx give-skill remove pr-reviewer
-
-# Remove without confirmation (auto-selects all)
-npx give-skill remove -y
-
-# Interactive removal (shows multiselect of all installed skills)
-npx give-skill remove
-
-# Clean up orphaned entries
-npx give-skill clean
+flins search
 ```
 
-### Status Indicators
+Interactive skill browser with filtering, details view, and one-click install.
 
-The `status` command shows one of the following states for each skill:
+### Install from Git
 
-| Icon | Status             | Description                                                      |
-| ---- | ------------------ | ---------------------------------------------------------------- |
-| ✓    | `latest`           | Skill is up to date with the remote repository                   |
-| ↓    | `update-available` | A newer version is available                                     |
-| ✗    | `error`            | Failed to check for updates (network issues, repo deleted, etc.) |
-| ○    | `orphaned`         | No valid installations found (folders were manually deleted)     |
+```bash
+# GitHub shorthand
+flins add expo/skills
 
-## Command Reference
+# Full URL
+flins add https://github.com/expo/skills
 
+# Specific agent
+flins add expo/skills -a copilot
+
+# List skills without installing
+flins add expo/skills --list
 ```
-give-skill <source> [options]
 
-Arguments:
-  source                  Git repo URL, GitHub shorthand (owner/repo), or direct path to skill
+## Commands
+
+### `flins add <source>` | `flins a <source>`
+
+Install skills from a git repository.
+
+```bash
+flins add <source> [options]
 
 Options:
-  -g, --global            Install skill globally (user-level) instead of project-level
-  -a, --agent <...>       Specify agents to install to (windsurf, gemini, claude-code, cursor, copilot, etc.)
-  -s, --skill <...>       Specify skill names to install (skip selection prompt)
-  -l, --list              List available skills in the repository without installing
-  -y, --yes               Skip all prompts (CI-friendly)
-  -V, --version           Show version
-  -h, --help              Show help
+  -g, --global              Install globally (user-level)
+  -a, --agent <agents...>   Target specific agents
+  -s, --skill <skills...>   Install specific skills by name
+  -l, --list                List available skills without installing
+  -y, --yes                 Auto-confirm all prompts
+  -f, --force               Skip all confirmations
+  --silent                  Suppress banner and non-error output
+```
 
-Commands:
-  update [skills...]      Update installed skills to their latest versions
-  status [skills...]      Check status of installed skills (compact view, use -v for details)
-  remove [skills...]      Remove installed skills (use -y to skip confirmation)
-  list                    List all installed skills
-  clean                   Remove orphaned skill entries from state
+### `flins outdated [skills...]`
+
+Check for available updates.
+
+```bash
+flins outdated [skills...] [options]
+
+Options:
+  -v, --verbose             Show detailed information
+```
+
+**Status indicators:**
+
+| Icon | Status           | Description                          |
+| ---- | ---------------- | ------------------------------------ |
+| `✓`  | latest           | Up to date                           |
+| `↓`  | update-available | New version available                |
+| `✗`  | error            | Failed to check (network/repo issue) |
+| `○`  | orphaned         | No valid installations               |
+
+### `flins update [skills...]`
+
+Update installed skills.
+
+```bash
+flins update [skills...] [options]
+
+Options:
+  -y, --yes                 Auto-confirm all prompts
+  -f, --force               Skip all confirmations
+  --silent                  Suppress banner and output
+```
+
+### `flins remove [skills...]`
+
+Uninstall skills.
+
+```bash
+flins remove [skills...] [options]
+
+Options:
+  -y, --yes                 Auto-confirm all prompts
+  -f, --force               Skip all confirmations
+  --silent                  Suppress banner and output
+```
+
+### `flins list`
+
+List all installed skills and commands.
+
+```bash
+flins list
+```
+
+### `flins search`
+
+Browse available skills interactively.
+
+```bash
+flins search
+```
+
+### `flins clean`
+
+Remove orphaned state entries.
+
+```bash
+flins clean [options]
+
+Options:
+  -y, --yes                 Auto-confirm prompts
+  -f, --force               Skip confirmations
+  --silent                  Suppress output
 ```
 
 ## Examples
 
-### Install from specific branch
-
-By default, `give-skill` uses the repository's default branch. To install from a specific branch, use the full GitHub URL with the branch:
-
-```bash
-# Install from develop branch
-npx give-skill https://github.com/org/repo/tree/develop
-
-# Install from develop branch with subpath
-npx give-skill https://github.com/org/repo/tree/develop/skills/custom
-
-# Install from a feature branch
-npx give-skill https://github.com/org/repo/tree/feature/new-skill
-```
-
-The branch is saved in the state file, so future updates will continue using the same branch.
-
 ### Install specific skills
 
 ```bash
-npx give-skill expo/skills -s pr-reviewer -s test-generator
+flins add expo/skills -s pr-reviewer -s test-generator
 ```
 
 ### Target multiple agents
 
 ```bash
-npx give-skill expo/skills -a claude-code -a copilot -a cursor
+flins add expo/skills -a claude-code -a copilot -a cursor
+```
+
+### Install from specific branch
+
+```bash
+# Branch is saved for future updates
+flins add https://github.com/org/repo/tree/develop
 ```
 
 ### CI/CD automation
 
 ```bash
-npx give-skill expo/skills -s pr-reviewer -g -a copilot -y
+# Non-interactive, global installation
+flins add expo/skills -s pr-reviewer -g -a copilot -f
 ```
 
 ## Where Skills Go
@@ -199,7 +227,7 @@ npx give-skill expo/skills -s pr-reviewer -g -a copilot -y
 | Copilot       | `.github/skills/<name>/`   | `~/.copilot/skills/<name>/`            |
 | Gemini CLI    | `.gemini/skills/<name>/`   | `~/.gemini/skills/<name>/`             |
 | Windsurf      | `.windsurf/skills/<name>/` | `~/.codeium/windsurf/skills/<name>/`   |
-| Trae          | `.trae/skills/<name>/`     | Project-level only (SOLO mode)         |
+| Trae          | `.trae/skills/<name>/`     | Project-level only                     |
 | Factory Droid | `.factory/skills/<name>/`  | `~/.factory/skills/<name>/`            |
 | Letta         | `.skills/<name>/`          | `~/.letta/skills/<name>/`              |
 | OpenCode      | `.opencode/skill/<name>/`  | `~/.config/opencode/skill/<name>/`     |
@@ -211,15 +239,47 @@ npx give-skill expo/skills -s pr-reviewer -g -a copilot -y
 | Goose         | `.goose/skills/<name>/`    | `~/.config/goose/skills/<name>/`       |
 | Qoder         | `.qoder/skills/<name>/`    | `~/.qoder/skills/<name>/`              |
 
+## Commands (Experimental) {#commands-experimental}
+
+> **Warning:** The commands feature is highly experimental and subject to change or removal in future releases. Unlike skills which follow the [Agent Skills](https://agentskills.io) open standard, commands have no standard yet. Each agent implements commands differently, and flins's command support may evolve significantly as standards emerge.
+
+### Command Types
+
+| Type       | Status            | Agents                       |
+| ---------- | ----------------- | ---------------------------- |
+| Markdown   | Supported         | Claude Code, OpenCode, Droid |
+| JSON       | Not supported yet | OpenCode only                |
+| Executable | Not supported yet | Factory Droid only           |
+
+### Markdown Compatibility
+
+| Feature         | Claude Code | OpenCode | Factory Droid |
+| --------------- | ----------- | -------- | ------------- |
+| `$ARGUMENTS`    | ✅          | ✅       | ✅            |
+| `$1`, `$2`...   | ✅          | ✅       | ❌            |
+| Bash `!command` | ✅          | ✅       | ❌            |
+| File refs `@`   | ✅          | ✅       | ❌            |
+| `allowed-tools` | ✅          | ❌       | ❌            |
+| `hooks`         | ✅          | ❌       | ❌            |
+
+### Where Commands Go
+
+| Agent         | Project Level                  | Global Level (`--global`)               |
+| ------------- | ------------------------------ | --------------------------------------- |
+| Claude Code   | `.claude/commands/<name>.md`   | `~/.claude/commands/<name>.md`          |
+| OpenCode      | `.opencode/commands/<name>.md` | `~/.config/opencode/commands/<name>.md` |
+| Factory Droid | `.factory/commands/<name>.md`  | `~/.factory/commands/<name>.md`         |
+
 ## Creating Skills
 
 Skills follow the [Agent Skills](https://agentskills.io) open standard. A skill is a folder with a `SKILL.md` file:
 
 ```markdown
 ---
+
 name: pr-reviewer
 description: Reviews pull requests against team guidelines
----
+tags: [code-review, pr, quality]
 
 # PR Reviewer
 
@@ -234,11 +294,9 @@ Reviews pull requests for:
 Activate when reviewing a pull request.
 ```
 
-For complete skill authoring guidance, see [agentskills.io](https://agentskills.io).
+### Skill Discovery Locations
 
-### Skill Locations
-
-The CLI automatically searches these paths in a repository:
+The CLI automatically searches:
 
 **Common locations:**
 
@@ -248,17 +306,20 @@ The CLI automatically searches these paths in a repository:
 - `skills/.experimental/`
 - `skills/.system/`
 
-**Agent-specific locations** (auto-detected from agent configs):
+**Agent-specific:**
 
 - `.claude/skills/`
+- `.claude/commands/`
 - `.cursor/skills/`
 - `.github/skills/`
 - `.gemini/skills/`
 - `.windsurf/skills/`
 - `.trae/skills/`
 - `.factory/skills/`
+- `.factory/commands/`
 - `.skills/` (Letta)
 - `.opencode/skill/`
+- `.opencode/commands/`
 - `.codex/skills/`
 - `.agent/skills/`
 - `.agents/skills/`
@@ -267,14 +328,39 @@ The CLI automatically searches these paths in a repository:
 - `.goose/skills/`
 - `.qoder/skills/`
 
-If a folder matches an agent's skill directory, the CLI will find it.
+For complete guidance, see [agentskills.io](https://agentskills.io).
+
+## State Management
+
+flins tracks installed skills for version control:
+
+| Type       | Location               | Purpose                          |
+| ---------- | ---------------------- | -------------------------------- |
+| **Local**  | `./skills.lock`        | Project-specific (commit to git) |
+| **Global** | `~/.flins/skills.lock` | Machine-wide installations       |
+
+```json
+{
+  "version": "1.0.0",
+  "skills": {
+    "pr-reviewer": {
+      "url": "https://github.com/expo/skills.git",
+      "branch": "main",
+      "commit": "abc123...",
+      "installations": [...]
+    }
+  }
+}
+```
+
+Commit `skills.lock` for team consistency. New contributors run `flins update` to sync.
 
 ## How It Works
 
 ```
 ┌─────────────┐     ┌─────────────┐     ┌──────────────────┐
-│   Source    │────▶│  give-skill │────▶│  Agent Folders   │
-│  (git repo) │     │    (CLI)    │     │  (installed)     │
+│   Source    │────▶│    flins     │────▶│  Agent Folders   │
+│  (git repo) │     │   (CLI)     │     │  (installed)     │
 └─────────────┘     └─────────────┘     └──────────────────┘
                           │
                           ▼
@@ -284,103 +370,56 @@ If a folder matches an agent's skill directory, the CLI will find it.
                    └──────────────┘
 ```
 
-1. **Clone** the source repository (supports specific branches and subpaths)
-2. **Discover** all `SKILL.md` files in common and agent-specific directories
-3. **Detect** installed agents on your system automatically
-4. **Install** skills to agent-specific directories
-5. **Track** installation state for future updates and management
-
-## State Management
-
-`give-skill` tracks installed skills for version control and updates:
-
-- **Local**: `skills.lock` in project directory (commit to git for team consistency)
-- **Global**: `~/.give-skill/state.json` for machine-wide installations
-
-```json
-{
-  "version": "1.0.0",
-  "skills": {
-    "pr-reviewer": {
-      "url": "https://github.com/expo/skills.git",
-      "branch": "main",
-      "commit": "abc123..."
-    }
-  }
-}
-```
-
-Commit `skills.lock` to ensure consistent skill versions across your team. New contributors can run `give-skill update` to synchronize.
+1. **Clone** source repository (branch/subpath support)
+2. **Discover** all `SKILL.md` and command files
+3. **Detect** installed agents automatically
+4. **Install** to agent-specific directories
+5. **Track** state for updates and management
 
 ## Troubleshooting
 
-<details>
-  <summary>
-    <h4>
-      No skills found
-    </h4>
-  </summary>
-  
-  Make sure your `SKILL.md` follows the [Agent Skills](https://agentskills.io) format:
-  
-  ```markdown
-  ---
-  name: my-skill
-  description: This describes what the skill does
-  ---
-  ```
-</details>
+### No skills or commands found
 
-<details>
-  <summary>
-    <h4>
-      Permission denied
-    </h4>
-  </summary>
-  
-  Check you have write permissions for the target directory.
-</details>
+- Skills: Ensure `SKILL.md` follows the format with `name` and `description` fields
+- Commands: Ensure `.md` files are in a `commands/` folder
 
-<details>
-  <summary>
-    <h4>
-      Agent not detected
-    </h4>
-  </summary>
-  
-  The CLI automatically detects installed agents by checking their default directories. To see which agents are detected, run a command and review the agent selection prompt. Manually specify with `-a` if needed.
-</details>
+### Permission denied
 
-<details>
-  <summary>
-    <h4>
-      Source URL formats
-    </h4>
-  </summary>
-  
-  `give-skill` supports multiple source formats:
-  
-  ```bash
-  # GitHub shorthand
-  npx give-skill expo/skills
-  
-  # Full GitHub URL
-  npx give-skill https://github.com/expo/skills
-  
-  # Specific branch
-  npx give-skill https://github.com/expo/skills/tree/develop
-  
-  # Specific branch with subpath
-  npx give-skill https://github.com/expo/skills/tree/develop/skills/custom
-  
-  # GitLab
-  npx give-skill https://gitlab.com/org/repo
-  
-  # Any git repository
-  npx give-skill https://example.com/repo.git
-  ```
-</details>
+Check write permissions for target directory.
+
+### Agent not detected
+
+Agents are detected by checking default directories. Manually specify with `-a` if needed.
+
+## Source Formats
+
+flins supports multiple source formats for installing skills:
+
+```bash
+# Directory name (looks up in flins directory)
+flins add better-auth
+
+# GitHub shorthand
+flins add expo/skills
+
+# Full GitHub URL
+flins add https://github.com/expo/skills
+
+# Specific branch
+flins add https://github.com/expo/skills/tree/develop
+
+# Branch with subpath
+flins add https://github.com/expo/skills/tree/develop/skills/custom
+
+# GitLab or any git host
+flins add https://gitlab.com/org/repo
+flins add https://example.com/repo.git
+```
+
+## Contributing
+
+Contributions welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-MIT © [Compile Café](https://github.com/compilecafe)
+MIT © [flins](https://github.com/flinstech)
