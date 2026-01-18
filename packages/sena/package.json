@@ -13,15 +13,15 @@
     "github-copilot",
     "skills"
   ],
-  "homepage": "https://github.com/compilecafe/sena#readme",
+  "homepage": "https://github.com/senahq/sena#readme",
   "bugs": {
-    "url": "https://github.com/compilecafe/sena/issues"
+    "url": "https://github.com/senahq/sena/issues"
   },
   "license": "MIT",
   "author": "sena",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/compilecafe/sena.git"
+    "url": "git+https://github.com/senahq/sena.git"
   },
   "bin": {
     "sena": "./dist/index.js"
