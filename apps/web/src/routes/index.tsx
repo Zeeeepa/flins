@@ -445,7 +445,7 @@ function App() {
                   variant="outline"
                   render={
                     <a
-                      href="https://github.com/senahq/sena"
+                      href="https://github.com/senahq/sena/blob/main/CONTRIBUTING/SKILLS.md"
                       target="_blank"
                       rel="noopener noreferrer"
                     />
