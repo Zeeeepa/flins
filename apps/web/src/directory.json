@@ -56,5 +56,18 @@
             "optimization",
             "mobile"
         ]
+    },
+    {
+        "name": "vercel",
+        "source": "https://github.com/vercel-labs/agent-skills/",
+        "description": "React and Next.js performance optimization guidelines from Vercel Engineering. Contains 40+ rules across 8 categories, plus web design guidelines and deployment capabilities",
+        "author": "vercel-labs",
+        "tags": [
+            "vercel",
+            "nextjs",
+            "react",
+            "performance",
+            "deployment"
+        ]
     }
 ]

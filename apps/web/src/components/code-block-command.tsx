@@ -20,12 +20,13 @@ export function CodeBlockCommand({
   const packageManager = config.packageManager
   const tabs = React.useMemo(() => {
     return {
-      bun: `bunx --bun sena@latest ${skill}`,
-      npm: `npx sena@latest ${skill}`,
-      pnpm: `pnpm dlx sena@latest ${skill}`,
-      yarn: `yarn dlx sena@latest ${skill}`,
+      sena: `sena add ${skill}`,
+      bun: `bunx --bun sena@latest add ${skill}`,
+      npm: `npx sena@latest add ${skill}`,
+      pnpm: `pnpm dlx sena@latest add ${skill}`,
+      yarn: `yarn dlx sena@latest add ${skill}`,
     }
-  }, [])
+  }, [skill])
 
   const copyCommand = React.useCallback(() => {
     const command = tabs[packageManager]
@@ -44,7 +45,7 @@ export function CodeBlockCommand({
         onValueChange={(value) => {
           setConfig({
             ...config,
-            packageManager: value as 'pnpm' | 'npm' | 'yarn' | 'bun',
+            packageManager: value as 'sena' | 'pnpm' | 'npm' | 'yarn' | 'bun',
           })
         }}
         value={packageManager}

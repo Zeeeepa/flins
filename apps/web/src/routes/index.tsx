@@ -1,7 +1,7 @@
 import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useMemo } from 'react'
+import { useMemo, useRef } from 'react'
 import { SiGithub } from '@icons-pack/react-simple-icons'
-import { PlusIcon, SearchIcon } from 'lucide-react'
+import { CheckIcon, CopyIcon, PlusIcon, SearchIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   InputGroup,
@@ -25,6 +25,8 @@ import { CodeBlockCommand } from '@/components/code-block-command'
 import directory from '../directory.json'
 import { zodValidator } from '@tanstack/zod-adapter'
 import { z } from 'zod'
+import { Tooltip, TooltipPopup, TooltipTrigger } from '@/components/ui/tooltip'
+import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -168,6 +170,8 @@ export const Route = createFileRoute('/')({
 })
 
 function App() {
+  const { copyToClipboard, isCopied } = useCopyToClipboard()
+  const inputRef = useRef<HTMLInputElement>(null)
   const { skills, authors, categories, searchParams } = Route.useLoaderData()
   const navigate = useNavigate({ from: Route.fullPath })
 
@@ -192,6 +196,14 @@ function App() {
       ? currentTags.filter((t) => t !== tag)
       : [...currentTags, tag]
     updateSearch({ tags: newTags.length > 0 ? newTags : undefined })
+  }
+
+  const toggleAuthor = (author: string) => {
+    const currentAuthors = searchParams.authors ?? []
+    const newAuthors = currentAuthors.includes(author)
+      ? currentAuthors.filter((a) => a !== author)
+      : [...currentAuthors, author]
+    updateSearch({ authors: newAuthors.length > 0 ? newAuthors : undefined })
   }
 
   return (
@@ -263,6 +275,42 @@ function App() {
           <div className="flex md:flex-row flex-col gap-8">
             <div className="md:w-70 shrink-0">
               <div className="sticky top-4 space-y-6">
+                <Field>
+                  <FieldLabel>Install sena globally (optional)</FieldLabel>
+                  <InputGroup>
+                    <InputGroupInput
+                      className="font-mono"
+                      aria-label="Global install command"
+                      value="npm i -g sena"
+                      ref={inputRef}
+                      readOnly
+                      type="text"
+                    />
+                    <InputGroupAddon align="inline-end">
+                      <Tooltip>
+                        <TooltipTrigger
+                          render={
+                            <Button
+                              aria-label="Copy"
+                              onClick={() => {
+                                if (inputRef.current) {
+                                  copyToClipboard(inputRef.current.value)
+                                }
+                              }}
+                              size="icon-xs"
+                              variant="ghost"
+                            />
+                          }
+                        >
+                          {isCopied ? <CheckIcon /> : <CopyIcon />}
+                        </TooltipTrigger>
+                        <TooltipPopup>
+                          <p>Copy to clipboard</p>
+                        </TooltipPopup>
+                      </Tooltip>
+                    </InputGroupAddon>
+                  </InputGroup>
+                </Field>
                 <Field>
                   <FieldLabel>Author</FieldLabel>
                   <Combobox
@@ -380,6 +428,20 @@ function App() {
                         {tag}
                       </Button>
                     ))}
+                  </div>
+                  <div className="flex gap-2 items-center">
+                    <span className="text-muted-foreground text-sm">By</span>
+                    <Button
+                      size="xs"
+                      variant={
+                        searchParams.authors?.includes(skill.author)
+                          ? 'default'
+                          : 'outline'
+                      }
+                      onClick={() => toggleAuthor(skill.author)}
+                    >
+                      {skill.author}
+                    </Button>
                   </div>
                 </div>
               ))}
