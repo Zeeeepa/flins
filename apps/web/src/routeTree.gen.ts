@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as DirectoryDotjsonRouteImport } from './routes/directory[.]json'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as NewIndexRouteImport } from './routes/new.index'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -28,35 +29,44 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NewIndexRoute = NewIndexRouteImport.update({
+  id: '/new/',
+  path: '/new/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/directory.json': typeof DirectoryDotjsonRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/new/': typeof NewIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/directory.json': typeof DirectoryDotjsonRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/new': typeof NewIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/directory.json': typeof DirectoryDotjsonRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/new/': typeof NewIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/directory.json' | '/sitemap.xml'
+  fullPaths: '/' | '/directory.json' | '/sitemap.xml' | '/new/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/directory.json' | '/sitemap.xml'
-  id: '__root__' | '/' | '/directory.json' | '/sitemap.xml'
+  to: '/' | '/directory.json' | '/sitemap.xml' | '/new'
+  id: '__root__' | '/' | '/directory.json' | '/sitemap.xml' | '/new/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DirectoryDotjsonRoute: typeof DirectoryDotjsonRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  NewIndexRoute: typeof NewIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -82,6 +92,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/new/': {
+      id: '/new/'
+      path: '/new'
+      fullPath: '/new/'
+      preLoaderRoute: typeof NewIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DirectoryDotjsonRoute: DirectoryDotjsonRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  NewIndexRoute: NewIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

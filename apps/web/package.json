@@ -16,6 +16,7 @@
     "@base-ui/react": "^1.1.0",
     "@cloudflare/vite-plugin": "^1.13.8",
     "@icons-pack/react-simple-icons": "^13.8.0",
+    "@paper-design/shaders-react": "^0.0.70",
     "@tailwindcss/vite": "^4.0.6",
     "@tanstack/react-devtools": "^0.7.0",
     "@tanstack/react-router": "^1.132.0",
