@@ -169,7 +169,7 @@ export const Route = createFileRoute('/')({
             'developer tools',
             'CLI',
           ],
-          aggregates: {
+          aggregateRating: {
             '@type': 'AggregateRating',
             ratingValue: '5',
             ratingCount: '1',
