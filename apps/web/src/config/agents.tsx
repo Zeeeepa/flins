@@ -38,7 +38,7 @@ export const SUPPORTED_AGENTS: Agent[] = [
   {
     name: 'Factory Droid',
     link: 'https://factory.ai/',
-    logo: '/brands/goose.png',
+    logo: '/brands/factory.png',
   },
   { name: 'Letta', link: 'https://www.letta.com/', logo: '/brands/letta.png' },
   {
@@ -54,7 +54,7 @@ export const SUPPORTED_AGENTS: Agent[] = [
   {
     name: 'Antigravity',
     link: 'https://antigravity.google/',
-    logo: '/brands/goose.png',
+    logo: '/brands/antigravity.png',
   },
   { name: 'Amp', link: 'http://ampcode.com/', logo: '/brands/amp.png' },
   { name: 'Kilo Code', link: 'https://kilo.ai/', logo: '/brands/kilo.png' },
