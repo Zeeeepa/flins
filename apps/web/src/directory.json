@@ -69,5 +69,16 @@
       "performance",
       "deployment"
     ]
+  },
+  {
+    "name": "svelte",
+    "source": "https://github.com/sveltejs/mcp/tree/main/plugins/svelte/skills",
+    "description": "Official AI agent skills from the Svelte team for building Svelte applications. Covers SvelteKit, Svelte 5 runes, server-side rendering, and web development best practices",
+    "author": "sveltejs",
+    "tags": [
+      "svelte",
+      "sveltekit",
+      "web"
+    ]
   }
 ]
