@@ -289,7 +289,7 @@ function App() {
                 >
                   {agent.logo && (
                     <img
-                      className="size-4"
+                      className="h-4"
                       src={agent.logo}
                       alt={`${agent.name} Logo`}
                     />

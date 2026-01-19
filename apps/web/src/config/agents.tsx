@@ -38,12 +38,12 @@ export const SUPPORTED_AGENTS: Agent[] = [
   {
     name: 'Factory Droid',
     link: 'https://factory.ai/',
+    logo: '/brands/goose.png',
   },
-  { name: 'Letta', link: 'https://www.letta.com/' },
+  { name: 'Letta', link: 'https://www.letta.com/', logo: '/brands/letta.png' },
   {
     name: 'OpenCode',
     logo: '/brands/opencode.svg',
-
     link: 'https://opencode.ai/',
   },
   {
@@ -51,14 +51,18 @@ export const SUPPORTED_AGENTS: Agent[] = [
     logo: '/brands/codex.png',
     link: 'https://openai.com/codex/',
   },
-  { name: 'Antigravity', link: 'https://antigravity.google/' },
-  { name: 'Amp', link: 'http://ampcode.com/' },
-  { name: 'Kilo Code', link: 'https://kilo.ai/' },
-  { name: 'Roo Code', link: 'https://roocode.com/' },
+  {
+    name: 'Antigravity',
+    link: 'https://antigravity.google/',
+    logo: '/brands/goose.png',
+  },
+  { name: 'Amp', link: 'http://ampcode.com/', logo: '/brands/amp.png' },
+  { name: 'Kilo Code', link: 'https://kilo.ai/', logo: '/brands/kilo.png' },
+  { name: 'Roo Code', link: 'https://roocode.com/', logo: '/brands/roo.png' },
   {
     name: 'Goose',
     logo: '/brands/goose.png',
     link: 'https://goose.ai/',
   },
-  { name: 'Qoder', link: 'https://qoder.com/' },
+  { name: 'Qoder', link: 'https://qoder.com/', logo: '/brands/qoder.png' },
 ]
