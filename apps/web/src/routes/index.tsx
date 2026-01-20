@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { Button } from '@/components/ui/button'
 import { FlinsCommands } from '@/components/flins-command'
+import { GitSourceExamples } from '@/components/git-source-examples'
 import directory from '../directory.json'
 import { zodValidator } from '@tanstack/zod-adapter'
 import { z } from 'zod'
@@ -174,7 +175,7 @@ function App() {
                 <span className="text-emerald-500">~</span>
               </span>
               <span className="flex items-center">
-                » flins add skill
+                » flins add user/repo
                 <div className="w-1 h-3 animate-pulse bg-white"></div>
               </span>
             </div>
@@ -314,6 +315,40 @@ function App() {
                 >
                   Submit Yours
                 </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <SectionDivider />
+
+      <section>
+        <div className="max-w-7xl mx-auto border-x flex flex-col relative">
+          <div className="grid lg:grid-cols-2 items-center">
+            <div className="flex flex-col items-start gap-6 p-8">
+              <h2 className="text-5xl">Install from any git repository</h2>
+              <p className="text-muted-foreground text-lg text-balance leading-relaxed">
+                Pull skills directly from GitHub, GitLab, Codeberg, or any
+                git-hosted URL. Just like your favorite package managers, flins
+                gives you the flexibility to install from anywhere.
+              </p>
+              <Button
+                size="xl"
+                render={
+                  <a
+                    href="https://github.com/flinstech/flins?tab=readme-ov-file#source-formats"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  />
+                }
+              >
+                View All Formats
+              </Button>
+            </div>
+            <div className="p-10 relative bg-linear-to-bl from-cyan-600 via-transparent to-cyan-600">
+              <div className="bg-background p-8 space-y-2">
+                <GitSourceExamples />
               </div>
             </div>
           </div>

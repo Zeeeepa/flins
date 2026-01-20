@@ -18,7 +18,7 @@ const PACKAGE_MANAGERS = {
   yarn: { prefix: 'yarn dlx flins', label: 'yarn' },
 } as const
 
-function TerminalLine({ command }: { command: string }) {
+export function TerminalLine({ command }: { command: string }) {
   return (
     <div className="flex flex-col text-xs font-mono">
       <span className="flex gap-2">
