@@ -51,7 +51,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <Footer />
         <TanStackDevtools
           config={{
-            position: 'bottom-right',
+            position: 'bottom-left',
           }}
           plugins={[
             {

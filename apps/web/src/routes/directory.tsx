@@ -1,6 +1,15 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { SiGithub } from '@icons-pack/react-simple-icons'
-import { PlusIcon, SearchIcon, GitPullRequestIcon } from 'lucide-react'
+import { PlusIcon, SearchIcon } from 'lucide-react'
+import { useState } from 'react'
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverPopup,
+  PopoverTitle,
+  PopoverDescription,
+  PopoverClose,
+} from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -30,7 +39,6 @@ import { CodeBlockCommand } from '@/components/code-block-command'
 import directory from '../directory.json'
 import { zodValidator } from '@tanstack/zod-adapter'
 import { z } from 'zod'
-import SectionDivider from '@/components/section-divider'
 
 export const Route = createFileRoute('/directory')({
   component: App,
@@ -181,6 +189,8 @@ function App() {
   const { skills, categories, searchParams } = Route.useLoaderData()
   const navigate = useNavigate({ from: Route.fullPath })
 
+  const [popoverOpen, setPopoverOpen] = useState(true)
+
   const updateSearch = (params: Partial<typeof searchParams>) => {
     navigate({
       search: (prev) => ({ ...prev, ...params }),
@@ -228,6 +238,47 @@ function App() {
                 workflow
               </p>
             </div>
+
+            <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
+              <PopoverTrigger
+                render={
+                  <Button
+                    className="lg:absolute lg:top-8 lg:right-8"
+                    size="lg"
+                    variant="default"
+                  >
+                    <PlusIcon />
+                    Add skill
+                  </Button>
+                }
+              />
+              <PopoverPopup className="w-80">
+                <div className="p-4 space-y-3">
+                  <PopoverTitle>Contribute a skill</PopoverTitle>
+                  <PopoverDescription>
+                    Share your skill with the community and help developers
+                    build better AI agents
+                  </PopoverDescription>
+                  <div className="flex gap-2 justify-end pt-2">
+                    <PopoverClose
+                      render={<Button variant="ghost">Close</Button>}
+                    />
+                    <Button
+                      render={
+                        <a
+                          href="https://github.com/flinstech/flins/blob/main/CONTRIBUTING_SKILLS.md"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        />
+                      }
+                    >
+                      <SiGithub />
+                      How to contribute
+                    </Button>
+                  </div>
+                </div>
+              </PopoverPopup>
+            </Popover>
 
             <InputGroup>
               <InputGroupInput
@@ -341,29 +392,6 @@ function App() {
             </EmptyContent>
           </Empty>
         )}
-      </div>
-
-      <SectionDivider />
-
-      <div className="max-w-7xl mx-auto border-x p-8 text-center">
-        <h2 className="text-4xl mb-4">Have a skill to share?</h2>
-        <p className="text-muted-foreground max-w-lg mx-auto mb-6">
-          Contribute to the directory and help the community build better AI
-          agents
-        </p>
-        <Button
-          variant="default"
-          render={
-            <a
-              href="https://github.com/flinstech/flins/blob/main/CONTRIBUTING_SKILLS.md"
-              target="_blank"
-              rel="noopener noreferrer"
-            />
-          }
-        >
-          <GitPullRequestIcon />
-          Submit your skill
-        </Button>
       </div>
     </>
   )
