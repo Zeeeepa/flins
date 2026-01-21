@@ -196,7 +196,7 @@ export async function checkStatus(skillNames?: string[]): Promise<StatusResult[]
     );
     results.push(result);
   } else {
-    spinner.start(`Checking ${skillsToCheck.length} ${Plural(skillsToCheck.length, "skill")}...`);
+    spinner.start("Checking for updates...");
     for (const { skillName, url, branch, commit, isLocal, installableType } of skillsToCheck) {
       const result = await checkSkillUpdate(
         skillName,
@@ -250,7 +250,7 @@ export async function performUpdate(
       }
     }
     p.log.success(pc.green("All skills are up to date"));
-    p.outro(pc.green("Already up to date"));
+    p.outro(pc.green("Everything is current"));
     return [];
   }
 
@@ -270,7 +270,7 @@ export async function performUpdate(
     selectedToUpdate = skillsWithUpdates.map((r) => r.skillName);
   } else {
     const selected = await p.multiselect({
-      message: "Select skills to update",
+      message: "Choose skills to update",
       options: updateChoices,
       required: true,
       initialValues: skillsWithUpdates.map((r) => r.skillName),
@@ -296,7 +296,7 @@ export async function performUpdate(
   }
 
   if (!autoConfirm) {
-    const confirmed = await p.confirm({ message: "Proceed with update?" });
+    const confirmed = await p.confirm({ message: "Ready to update?" });
     if (p.isCancel(confirmed) || !confirmed) {
       p.cancel("Update cancelled");
       return [];
@@ -304,9 +304,7 @@ export async function performUpdate(
   }
 
   const spinner = p.spinner();
-  spinner.start(
-    `Updating ${selectedToUpdate.length} ${Plural(selectedToUpdate.length, "skill")}...`,
-  );
+  spinner.start("Updating...");
 
   for (const { skillName, url, subpath, isLocal, installableType } of skillsToUpdate) {
     const statusResult = statusResults.find((r) => r.skillName === skillName);
@@ -412,7 +410,7 @@ export async function performUpdate(
   const failed = results.filter((r) => !r.success || r.failed > 0);
 
   if (successful.length > 0) {
-    p.log.success(pc.green(`Updated ${successful.length} ${Plural(successful.length, "skill")}`));
+    p.log.success(pc.green(`Updated successfully`));
     for (const r of successful) {
       p.log.message(
         `  ${pc.green("✓")} ${pc.cyan(r.skillName)} (${r.updated} ${Plural(r.updated, "installation")})`,
@@ -431,9 +429,9 @@ export async function performUpdate(
   }
 
   if (successful.length > 0) {
-    p.outro(pc.green("Skills updated successfully"));
+    p.outro(pc.green("Done! Skills updated."));
   } else {
-    p.outro(pc.yellow("No skills were updated"));
+    p.outro(pc.yellow("Nothing to update"));
   }
 
   return results;
@@ -459,10 +457,10 @@ export async function displayStatus(
     }[result.status];
 
     const statusText = {
-      latest: pc.green("latest"),
-      "update-available": pc.yellow("update available"),
-      error: pc.red("error"),
-      orphaned: pc.dim("orphaned"),
+      latest: pc.green("Up to date"),
+      "update-available": pc.yellow("Update available"),
+      error: pc.red("Failed to check"),
+      orphaned: pc.dim("Missing files"),
     }[result.status];
 
     const validInstallations = result.installations.filter((i) => i.exists);
@@ -518,7 +516,7 @@ export async function cleanOrphaned(
   _options: { yes?: boolean; force?: boolean; silent?: boolean } = {},
 ): Promise<void> {
   const spinner = p.spinner();
-  spinner.start("Checking for orphaned entries...");
+  spinner.start("Cleaning up...");
 
   await Promise.all([
     cleanGlobalOrphanedEntries(),

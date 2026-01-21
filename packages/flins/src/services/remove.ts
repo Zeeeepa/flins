@@ -157,7 +157,7 @@ export async function performRemove(
       );
     } else {
       const selected = await p.multiselect({
-        message: "Select skills to remove",
+        message: "Choose skills to remove",
         options: validChoices,
         required: true,
         initialValues: validChoices.map((c) => c.value),
@@ -237,7 +237,7 @@ export async function performRemove(
     }));
 
     const selected = await p.multiselect({
-      message: "Select skills to remove",
+      message: "Choose skills to remove",
       options: removeChoices,
       required: true,
       initialValues: toRemove.map(({ skillName }) => skillName),
@@ -263,7 +263,7 @@ export async function performRemove(
   }
 
   if (!autoConfirm) {
-    const confirmed = await p.confirm({ message: "Remove these skills?" });
+    const confirmed = await p.confirm({ message: "Remove selected skills?" });
     if (p.isCancel(confirmed) || !confirmed) {
       p.cancel("Remove cancelled");
       return [];
@@ -271,9 +271,7 @@ export async function performRemove(
   }
 
   const spinner = p.spinner();
-  spinner.start(
-    `Removing ${selectedToRemove.length} skill${selectedToRemove.length > 1 ? "s" : ""}...`,
-  );
+  spinner.start("Removing...");
 
   for (const { skillName, isLocal, installableType, installations } of toRemove) {
     if (!selectedToRemove.includes(skillName)) {
@@ -322,7 +320,7 @@ export async function performRemove(
   const failed = results.filter((r) => !r.success || r.failed > 0);
 
   if (successful.length > 0) {
-    p.log.success(pc.green(`Removed ${successful.length} ${Plural(successful.length, "skill")}`));
+    p.log.success(pc.green(`Removed successfully`));
     for (const r of successful) {
       p.log.message(`  ${pc.green("✓")} ${pc.cyan(r.skillName)}`);
       p.log.message(`    ${pc.dim(`${r.removed} ${Plural(r.removed, "installation")} removed`)}`);
@@ -342,9 +340,9 @@ export async function performRemove(
   }
 
   if (successful.length > 0) {
-    p.outro(pc.green("Skills removed successfully"));
+    p.outro(pc.green("Done! Skills removed."));
   } else {
-    p.outro(pc.yellow("No skills were removed"));
+    p.outro(pc.yellow("Nothing removed"));
   }
 
   return results;

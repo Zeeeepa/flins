@@ -8,18 +8,18 @@ export async function searchCommand() {
   try {
     const spinner = p.spinner();
 
-    spinner.start("Loading skill directory...");
+    spinner.start("Browsing skills...");
     const entries = await listDirectory();
     spinner.stop("Directory loaded");
 
     if (entries.length === 0) {
-      p.log.warn("No skills found in directory");
-      p.outro("Check back later for new skills");
+      p.log.warn("Directory is empty");
+      p.outro("New skills coming soon");
       return;
     }
 
     const selected = await p.autocompleteMultiselect({
-      message: "Select a skill to view details:",
+      message: "Find a skill:",
       options: entries.map((entry) => ({
         value: entry.name,
         label: entry.name,
@@ -45,7 +45,7 @@ export async function searchCommand() {
     showEntryDetails(entry);
 
     const install = await p.confirm({
-      message: "Install this skill?",
+      message: "Add this skill?",
     });
 
     if (p.isCancel(install) || !install) {
@@ -56,8 +56,8 @@ export async function searchCommand() {
     const { installCommand } = await import("@/cli/commands/install");
     await installCommand(entry.name, {});
   } catch (error) {
-    p.log.error(error instanceof Error ? error.message : "Failed to fetch directory");
-    p.outro(pc.red("Couldn't load directory"));
+    p.log.error(error instanceof Error ? error.message : "Something went wrong. Try again or check your connection.");
+    p.outro(pc.red("Couldn't load skill directory"));
     process.exit(1);
   }
 }

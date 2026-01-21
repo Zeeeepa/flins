@@ -53,9 +53,9 @@ export async function installCommand(source: string, options: InstallOptions) {
       process.exit(1);
     }
   } catch (error) {
-    p.log.error(error instanceof Error ? error.message : "Unknown error occurred");
+    p.log.error(error instanceof Error ? error.message : "Something went wrong. Try again or check your connection.");
     if (!options.silent) {
-      p.outro(pc.red("Couldn't install skill"));
+      p.outro(pc.red("Installation failed"));
     }
     process.exit(1);
   }

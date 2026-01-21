@@ -44,6 +44,8 @@ program
   .command("add <source>", { isDefault: false })
   .description("Install skills from git repository")
   .alias("a")
+  .alias("install")
+  .alias("i")
   .option("-g, --global", "Install skill globally (user-level) instead of project-level")
   .option(
     "-a, --agent <agents...>",
@@ -54,55 +56,71 @@ program
   .option("-y, --yes", "Auto-confirm all prompts (non-interactive mode)")
   .option("-f, --force", "Skip all confirmations")
   .option("--silent", "Suppress banner and non-error output")
+  .addHelpText("beforeAll", logo)
   .action(async (source: string, options: InstallOptions) => {
     await installCommand(source, options);
   });
 
 program
   .command("update [skills...]")
+  .alias("u")
   .description("Update installed skills to their latest versions from git sources")
   .option("-y, --yes", "Auto-confirm all prompts (non-interactive mode)")
   .option("-f, --force", "Skip all confirmations")
   .option("--silent", "Suppress banner and non-error output")
+  .addHelpText("beforeAll", logo)
   .action(async (skills: string[], options: UpdateOptions) => {
     await updateCommand(skills, options);
   });
 
 program
   .command("outdated [skills...]")
+  .alias("o")
+  .alias("status")
   .description("Check installation status, available updates, and orphaned skills")
   .option("-v, --verbose", "Show detailed information including installation paths")
+  .addHelpText("beforeAll", logo)
   .action(async (skills: string[], options: OutdatedOptions) => {
     await outdatedCommand(skills, options);
   });
 
 program
   .command("remove [skills...]")
+  .alias("r")
+  .alias("rm")
+  .alias("uninstall")
   .description("Uninstall skills from your AI coding agents")
   .option("-y, --yes", "Auto-confirm all prompts (non-interactive mode)")
   .option("-f, --force", "Skip all confirmations")
   .option("--silent", "Suppress banner and non-error output")
+  .addHelpText("beforeAll", logo)
   .action(async (skills: string[], options: RemoveOptions) => {
     await removeCommand(skills, options);
   });
 
 program
   .command("list")
+  .alias("l")
   .description("List all installed skills across your AI coding agents")
+  .addHelpText("beforeAll", logo)
   .action(async () => {
     await listCommand();
   });
 
 program
-  .command("search")
+  .command("search")  
+  .alias("s")
   .description("Browse and discover available skills from the flins directory")
+  .addHelpText("beforeAll", logo)
   .action(async () => {
     await searchCommand();
   });
 
 program
   .command("clean")
+  .alias("c")
   .description("Remove orphaned skill entries from state tracking")
+  .addHelpText("beforeAll", logo)
   .option("-y, --yes", "Auto-confirm all prompts (non-interactive mode)")
   .option("-f, --force", "Skip all confirmations")
   .option("--silent", "Suppress banner and non-error output")

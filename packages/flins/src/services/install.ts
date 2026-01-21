@@ -66,7 +66,7 @@ export async function performInstallation(
   };
 
   try {
-    context.spinner.start("Parsing source...");
+    context.spinner.start("Reading repository...");
     const parsed = parseSource(source);
     const branch = parsed.branch ?? "main";
     context.spinner.stop(
@@ -75,13 +75,13 @@ export async function performInstallation(
       }${parsed.branch ? ` @ ${pc.cyan(parsed.branch)}` : ""}`
     );
 
-    context.spinner.start("Cloning repository...");
+    context.spinner.start("Downloading...");
     context.tempDir = await cloneRepo(parsed.url, parsed.branch);
     context.spinner.stop("Repository cloned");
 
     const commit = await getCommitHash(context.tempDir);
 
-    context.spinner.start("Discovering skills and commands...");
+    context.spinner.start("Finding skills...");
     const skills = await discoverSkills(context.tempDir, parsed.subpath);
     const commands = await discoverCommands(context.tempDir, parsed.subpath);
 
@@ -89,7 +89,7 @@ export async function performInstallation(
       context.spinner.stop(pc.red("No skills or commands found"));
       p.outro(
         pc.red(
-          "No valid skills found. Skills require a SKILL.md with name and description."
+          "No skills found. Repository must have SKILL.md files."
         )
       );
       return { success: false, installed: 0, failed: 0, results: [] };
@@ -171,12 +171,12 @@ export async function performInstallation(
     if (selectedCommands && selectedCommands.length > 0) {
       p.log.warn(
         pc.yellow(
-          "Commands may change significantly or be removed - your feedback helps shape future releases"
+          "Commands are experimental and may change"
         )
       );
     }
 
-    context.spinner.start("Installing...");
+    context.spinner.start("Adding skills...");
     const results = await performParallelInstall(
       selectedSkills || [],
       skillsAgents || [],
@@ -251,7 +251,7 @@ async function selectSkills(
     }));
 
     const selected = await p.multiselect({
-      message: "Select skills to install",
+      message: "Choose skills to add",
       options: skillChoices,
       required: false,
     });
@@ -300,7 +300,7 @@ async function selectCommands(
     }));
 
     const selected = await p.multiselect({
-      message: "Select commands to install",
+      message: "Choose commands to add",
       options: commandChoices,
       required: false,
     });
@@ -353,7 +353,7 @@ async function selectAgentsForSkills(
     return options.agent as AgentType[];
   }
 
-  context.spinner.start("Detecting installed agents...");
+  context.spinner.start("Finding AI tools...");
   const installedAgents = await detectInstalledAgents();
   context.spinner.stop(
     `Detected ${installedAgents.length} agent${
@@ -368,7 +368,7 @@ async function selectAgentsForSkills(
       p.log.info("Installing to all agents (none detected)");
       return allAgents;
     } else {
-      p.log.warn("No coding agents detected. You can still install skills.");
+      p.log.warn("No AI tools found. Choose where to install:");
 
       const allAgentChoices = Object.entries(agents).map(([key, config]) => ({
         value: key as AgentType,
@@ -376,7 +376,7 @@ async function selectAgentsForSkills(
       }));
 
       const selected = await p.multiselect({
-        message: "Select agents to install skills to",
+        message: "Where should we install these?",
         options: allAgentChoices,
         required: true,
       });
@@ -410,7 +410,7 @@ async function selectAgentsForSkills(
     }));
 
     const selected = await p.multiselect({
-      message: "Select agents to install skills to",
+      message: "Where should we install these?",
       options: agentChoices,
       required: true,
       initialValues: installedAgents,
@@ -530,17 +530,17 @@ async function determineScope(options: Options): Promise<boolean | null> {
 
   if (options.global === undefined && !(options.yes || options.force)) {
     const scope = await p.select({
-      message: "Installation scope",
+      message: "Where to install?",
       options: [
         {
           value: false,
           label: "Project",
-          hint: "Install in current directory (committed with your project)",
+          hint: "saved with this project",
         },
         {
           value: true,
           label: "Global",
-          hint: "Install in home directory (available across all projects)",
+          hint: "available for all projects",
         },
       ],
     });
@@ -613,7 +613,7 @@ async function showSummaryAndConfirm(
 
   if (!autoConfirm) {
     const confirmed = await p.confirm({
-      message: "Proceed with installation?",
+      message: "Ready to install?",
     });
 
     if (p.isCancel(confirmed) || !confirmed) {
@@ -815,9 +815,9 @@ async function performParallelInstall(
   }
 
   if (successful.length > 0) {
-    p.outro(pc.green("Installation complete"));
+    p.outro(pc.green("Done! Skills ready to use."));
   } else {
-    p.outro(pc.yellow("No items were installed"));
+    p.outro(pc.yellow("Nothing installed"));
   }
 
   return {
