@@ -1,125 +1,111 @@
-Use Bun instead of npm, pnpm, or yarn.
+Use **Bun** exclusively.
+Do **NOT** use npm, pnpm, or yarn under any circumstances.
 
 ## Plan Mode
 
-* Produce extremely concise plans.
-* Prioritize concision over grammar or readability.
-* Avoid explanations, prose, or filler.
-* End every plan with a list titled **“Unresolved Questions”**.
-* Include only questions that materially block execution.
-* If no blockers exist, explicitly state **“Unresolved Questions: None.”**
+When operating in Plan Mode:
+
+- Produce concise, execution-focused plans.
+- Clarity is required; verbosity is not.
+- Do not include explanations, prose, or filler.
+- Output only concrete steps.
+- Every plan **MUST** end with a section titled **“Unresolved Questions”**.
+- Include only questions that materially block execution.
+- If there are no blockers, explicitly write:
+
+  **Unresolved Questions: None.**
+
+Failure to follow this structure is not allowed.
 
 ## Code Style & Generation Rules
 
-* Generate self-explanatory code.
-* Do not use comments.
-* Express intent through naming, structure, and composition only.
-* Maintain strict consistency in:
-  * File structure
-  * Module boundaries
-  * Naming conventions
-  * Architectural patterns
-* Always explore the existing project first to understand:
-  * Current directory layout
-  * Conventions
-  * Abstractions
-  * Dependency patterns
-* Place new code only in logically correct locations based on the existing structure.
-* Do not introduce new patterns unless strictly necessary.
-* Always use **Context7 MCP** when:
-  * Accessing library or API documentation
-  * Generating code that depends on third-party libraries
-  * Providing setup, installation, or configuration steps
-* Do this automatically without requiring explicit user instruction.
+All generated code must follow these rules:
 
-oke sayang, ini versi **paling keras**, **aggressive**, dan **zero-tolerance**. Ini sudah level **command**, bukan guideline lagi. Tetap full English.
+- Code must be self-explanatory.
+- Do not use comments.
+- Intent must be expressed through naming, structure, and composition only.
 
-## Mandatory Skill Enforcement — **ABSOLUTE / ZERO TOLERANCE**
+Strict consistency is required across:
 
-These rules are **NON-NEGOTIABLE**.
-Failure to follow **ANY** rule below results in an **INVALID RESPONSE**.
+- File structure
+- Module boundaries
+- Naming conventions
+- Architectural patterns
 
-There are **NO EXCUSES**, **NO INTERPRETATION**, and **NO FLEXIBILITY**.
+Before writing any code:
 
-If a condition applies, the corresponding skill **MUST** be used.
-Skipping, replacing, or partially applying a skill is **STRICTLY FORBIDDEN**.
+- Explore the existing project.
+- Understand the directory layout, conventions, abstractions, and dependency patterns.
 
-## ENFORCEMENT RULES
+When adding new code:
 
-* If the condition is met → **USE THE SKILL**
-* If unsure → **ASSUME THE CONDITION APPLIES AND USE THE SKILL**
-* If multiple conditions apply → **USE ALL RELEVANT SKILLS**
-* Do **NOT** proceed with an answer until all required skills are applied
+- Place it only in logically correct locations.
+- Do not introduce new patterns unless strictly necessary.
 
-## SKILL REQUIREMENTS (HARD RULES)
+## Mandatory Skill Enforcement (Zero Tolerance)
 
-* **Skill(avoid-feature-creep)**
-  **MANDATORY** for **any** feature planning, scope discussion, MVP definition, roadmap creation, or backlog management.
-  Not using this skill in these cases is a **DIRECT VIOLATION**.
+All rules below are **NON-NEGOTIABLE**.
 
-* **Skill(commander-guidelines)**
-  **MANDATORY** when creating **any CLI tool** involving commands, flags, options, arguments, or subcommands.
-  Even a single flag **REQUIRES** this skill.
+If any applicable skill is not used, the response is **INVALID**.
 
-* **Skill(clack-guidelines)**
-  **MANDATORY** when building **interactive CLI behavior**, including prompts, confirmations, selections, autocomplete, spinners, or progress tracking.
-  Interactive CLI without this skill is **UNACCEPTABLE**.
+There are:
 
-* **Skill(Convex Functions)**
-  **MANDATORY** when writing **any Convex query, mutation, action, or HTTP action**.
-  No exceptions. No shortcuts.
+- No excuses
+- No interpretation
+- No flexibility
 
-* **Skill(Convex Schema Validator)**
-  **MANDATORY** when defining, validating, or modifying **any Convex schema or table structure**.
-  Schema work without this skill is **INVALID**.
+Rules:
 
-* **Skill(Convex Migrations)**
-  **MANDATORY** when evolving schemas, adding or changing fields, or backfilling data.
-  Ignoring migration rules is a **CRITICAL ERROR**.
+- If a condition applies → use the skill.
+- If unsure → assume it applies and use the skill.
+- If multiple conditions apply → use all relevant skills.
+- Do not proceed with an answer until all required skills are applied.
 
-* **Skill(Convex Security Check)**
-  **MANDATORY** for **quick, high-level, or lightweight** security reviews of Convex applications.
+## Skill Requirements
 
-* **Skill(Convex Security Audit)**
-  **MANDATORY** for **deep, thorough, or production-level** security reviews, especially authorization and data access.
-  Using the wrong security skill is **NOT ALLOWED**.
+**Planning & Scope**
 
-* **Skill(Convex HTTP Actions)**
-  **MANDATORY** when implementing **external APIs, webhooks, or HTTP endpoints**.
-  Any HTTP integration without this skill is **REJECTED**.
+- **Skill(avoid-feature-creep)**
+  Required for feature planning, scope discussion, MVPs, roadmaps, and backlogs.
 
-* **Skill(Convex File Storage)**
-  **MANDATORY** when handling **file uploads, downloads, storage, serving, or deletion**.
-  File logic without this skill is **BROKEN BY DEFINITION**.
+**CLI**
 
-* **Skill(Convex Realtime)**
-  **MANDATORY** for **subscriptions, real-time updates, pagination, or optimistic UI patterns**.
-  Realtime features without this skill are **NOT ACCEPTABLE**.
+- **Skill(commander-guidelines)**
+  Required for any CLI with commands, flags, options, arguments, or subcommands.
+- **Skill(clack-guidelines)**
+  Required for interactive CLI behavior: prompts, confirmations, selections, spinners, progress, autocomplete.
 
-* **Skill(Convex Cron Jobs)**
-  **MANDATORY** when scheduling **recurring jobs, delayed tasks, or background processes**.
-  Any scheduler logic without this skill is **WRONG**.
+**Convex**
 
-* **Skill(Convex Component Authoring)**
-  **MANDATORY** when creating **reusable or isolated Convex components**.
-  Reusable logic without this skill is **POOR ARCHITECTURE**.
+- **Skill(Convex Functions)**
+  Required for any query, mutation, action, or HTTP action.
+- **Skill(Convex Schema Validator)**
+  Required for defining or modifying schemas and tables.
+- **Skill(Convex Migrations)**
+  Required for schema evolution and data backfills.
+- **Skill(Convex Security Check)**
+  Required for quick or high-level security reviews.
+- **Skill(Convex Security Audit)**
+  Required for deep or production-level security reviews.
+- **Skill(Convex HTTP Actions)**
+  Required for APIs, webhooks, and HTTP endpoints.
+- **Skill(Convex File Storage)**
+  Required for file upload, download, storage, serving, or deletion.
+- **Skill(Convex Realtime)**
+  Required for subscriptions, realtime updates, pagination, or optimistic UI.
+- **Skill(Convex Cron Jobs)**
+  Required for scheduled or background jobs.
+- **Skill(Convex Component Authoring)**
+  Required for reusable or isolated Convex components.
+- **Skill(Convex Best Practices)**
+  Required for production-ready architecture or long-term system design.
+- **Skill(Convex Agents)**
+  Required for persistent agents or long-running AI workflows.
 
-* **Skill(Convex Best Practices)**
-  **MANDATORY** when designing **production-ready systems**, architectural decisions, or long-term Convex setups.
-  Production advice without this skill is **UNTRUSTWORTHY**.
+## Final Warning
 
-* **Skill(Convex Agents)**
-  **MANDATORY** when building **persistent AI agents**, tool-based workflows, or long-running agent systems.
-  Agent logic without this skill is **INCOMPLETE**.
-
-* **Skill(commit)**
-  **MANDATORY** when creating **git commits**, including commit messages, structure, or conventions.
-  Git output without this skill is **INVALID AND REJECTED**.
-
-## FINAL WARNING
-
-If a response matches a condition and does **NOT** explicitly apply the required skill:
+If a response matches a condition and does **not** apply the required skill:
 
 **STOP. DO NOT ANSWER. FIX THE RESPONSE.**
 
-This is **ENFORCEMENT**, not suggestion.
+This is enforcement, not guidance.
