@@ -1,9 +1,8 @@
-import { join, resolve } from "path";
-import { existsSync, readFileSync, writeFileSync, rmSync, readdirSync, lstatSync } from "fs";
-import type { LocalState, LocalSkillEntry, SkillInstallation, Dirent } from "@/types/state";
-import type { AgentType } from "@/types/agents";
+import { resolve } from "path";
+import { existsSync, readFileSync, writeFileSync, rmSync } from "fs";
+import type { LocalState, SkillEntry, SkillInstallation } from "@/types/state";
 import type { InstallableType } from "@/types/skills";
-import { agents } from "../agents/config";
+import { skillKey, commandKey, findInstallations } from "@/utils/state";
 
 const STATE_VERSION = "1.0.0";
 const LOCAL_STATE_FILE = "skills.lock";
@@ -58,35 +57,25 @@ export function addLocalSkill(
     };
   }
 
-  const key =
-    installableType === "skill"
-      ? `skill:${skillName.toLowerCase()}`
-      : `command:${skillName.toLowerCase()}`;
+  const key = installableType === "skill" ? skillKey(skillName) : commandKey(skillName);
+  const existing = state.skills[key];
 
   let updated = false;
   let previousBranch: string | undefined;
 
-  if (!state.skills[key]) {
-    state.skills[key] = {
-      url,
-      subpath,
-      branch,
-      commit,
-    };
-  } else {
-    if (state.skills[key].branch !== branch) {
-      previousBranch = state.skills[key].branch;
-      state.skills[key].branch = branch;
-      state.skills[key].commit = commit;
-      updated = true;
-    }
-    state.skills[key].url = url;
-    state.skills[key].commit = commit;
-    if (subpath) {
-      state.skills[key].subpath = subpath;
-    }
+  if (existing && existing.branch !== branch) {
+    previousBranch = existing.branch;
+    updated = true;
   }
 
+  const entry: SkillEntry = {
+    url,
+    subpath,
+    branch,
+    commit,
+  };
+
+  state.skills[key] = entry;
   saveLocalState(state, cwd);
   return { updated, previousBranch };
 }
@@ -102,10 +91,7 @@ export function removeLocalSkill(
     return;
   }
 
-  const key =
-    installableType === "skill"
-      ? `skill:${skillName.toLowerCase()}`
-      : `command:${skillName.toLowerCase()}`;
+  const key = installableType === "skill" ? skillKey(skillName) : commandKey(skillName);
   delete state.skills[key];
 
   if (Object.keys(state.skills).length > 0) {
@@ -124,16 +110,13 @@ export function getLocalSkill(
   skillName: string,
   installableType: InstallableType,
   cwd?: string,
-): LocalSkillEntry | null {
+): SkillEntry | null {
   const state = loadLocalState(cwd);
   if (!state) {
     return null;
   }
 
-  const key =
-    installableType === "skill"
-      ? `skill:${skillName.toLowerCase()}`
-      : `command:${skillName.toLowerCase()}`;
+  const key = installableType === "skill" ? skillKey(skillName) : commandKey(skillName);
 
   return state.skills[key] || null;
 }
@@ -150,10 +133,7 @@ export function updateLocalSkillCommit(
     return;
   }
 
-  const key =
-    installableType === "skill"
-      ? `skill:${skillName.toLowerCase()}`
-      : `command:${skillName.toLowerCase()}`;
+  const key = installableType === "skill" ? skillKey(skillName) : commandKey(skillName);
 
   const skill = state.skills[key];
   if (skill) {
@@ -171,69 +151,7 @@ export function findLocalSkillInstallations(
   installableType: InstallableType,
   cwd?: string,
 ): SkillInstallation[] {
-  const installations: SkillInstallation[] = [];
-  const basePath = cwd || process.cwd();
-
-  for (const [agentType, agentConfig] of Object.entries(agents)) {
-    if (installableType === "skill") {
-      const skillsDirPath = join(basePath, agentConfig.skillsDir);
-
-      if (existsSync(skillsDirPath)) {
-        try {
-          const entries = readdirSync(skillsDirPath, { withFileTypes: true }) as Dirent[];
-          const matchingEntry = entries.find((e) => {
-            if (e.name.toLowerCase() !== skillName.toLowerCase()) {
-              return false;
-            }
-            if (e.isDirectory()) {
-              return true;
-            }
-            const fullPath = join(skillsDirPath, e.name);
-            try {
-              return lstatSync(fullPath).isSymbolicLink();
-            } catch {
-              return false;
-            }
-          });
-
-          if (matchingEntry) {
-            installations.push({
-              agent: agentType as AgentType,
-              installableType: "skill",
-              type: "project",
-              path: join(agentConfig.skillsDir, matchingEntry.name),
-            });
-          }
-        } catch {}
-      }
-    } else {
-      const commandsDir = agentConfig.commandsDir;
-      if (commandsDir) {
-        const commandsDirPath = join(basePath, commandsDir);
-
-        if (existsSync(commandsDirPath)) {
-          try {
-            const entries = readdirSync(commandsDirPath, { withFileTypes: true }) as Dirent[];
-            const matchingEntry = entries.find((e) => {
-              const baseName = e.name.replace(/\.md$/, "");
-              return baseName.toLowerCase() === skillName.toLowerCase();
-            });
-
-            if (matchingEntry) {
-              installations.push({
-                agent: agentType as AgentType,
-                installableType: "command",
-                type: "project",
-                path: join(commandsDir, matchingEntry.name),
-              });
-            }
-          } catch {}
-        }
-      }
-    }
-  }
-
-  return installations;
+  return findInstallations(skillName, installableType, { type: "project", cwd });
 }
 
 export async function cleanOrphanedEntries(cwd?: string): Promise<void> {

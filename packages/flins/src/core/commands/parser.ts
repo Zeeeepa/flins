@@ -21,7 +21,3 @@ export function parseMarkdownCommand(filePath: string, content: string): Command
 export function getCommandDisplayName(command: Command): string {
   return command.name;
 }
-
-export function getCommandDescription(command: Command): string {
-  return command.description || `Command: ${command.name}`;
-}

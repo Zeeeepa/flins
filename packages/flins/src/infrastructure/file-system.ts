@@ -11,6 +11,22 @@ const isExcluded = (name: string): boolean => {
   return false;
 };
 
+async function withErrorHandling<T>(
+  fn: () => Promise<T>,
+  path: string,
+): Promise<{ success: boolean; path: string; error?: string }> {
+  try {
+    await fn();
+    return { success: true, path };
+  } catch (error) {
+    return {
+      success: false,
+      path,
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+}
+
 export async function copyDirectory(src: string, dest: string): Promise<void> {
   await mkdir(dest, { recursive: true });
 
@@ -36,21 +52,10 @@ export async function installSkillFiles(
   sourceDir: string,
   targetDir: string,
 ): Promise<{ success: boolean; path: string; error?: string }> {
-  try {
+  return withErrorHandling(async () => {
     await mkdir(targetDir, { recursive: true });
     await copyDirectory(sourceDir, targetDir);
-
-    return {
-      success: true,
-      path: targetDir,
-    };
-  } catch (error) {
-    return {
-      success: false,
-      path: targetDir,
-      error: error instanceof Error ? error.message : "Unknown error",
-    };
-  }
+  }, targetDir);
 }
 
 export async function installSkillAsSymlink(
@@ -59,7 +64,7 @@ export async function installSkillAsSymlink(
   targetDir: string,
   options: { global?: boolean } = {},
 ): Promise<{ success: boolean; path: string; error?: string }> {
-  try {
+  return withErrorHandling(async () => {
     const agentsSkillsDir = getSkillsSourceDir(options);
     const sourceStorePath = join(agentsSkillsDir, skillName);
 
@@ -71,18 +76,7 @@ export async function installSkillAsSymlink(
     await mkdir(targetParent, { recursive: true });
     await rm(targetDir, { recursive: true, force: true });
     await symlink(relative(targetParent, sourceStorePath), targetDir);
-
-    return {
-      success: true,
-      path: targetDir,
-    };
-  } catch (error) {
-    return {
-      success: false,
-      path: targetDir,
-      error: error instanceof Error ? error.message : "Unknown error",
-    };
-  }
+  }, targetDir);
 }
 
 export async function installCommandAsSymlink(
@@ -91,7 +85,7 @@ export async function installCommandAsSymlink(
   targetPath: string,
   options: { global?: boolean } = {},
 ): Promise<{ success: boolean; path: string; error?: string }> {
-  try {
+  return withErrorHandling(async () => {
     const agentsCommandsDir = getCommandsSourceDir(options);
     const sourceStorePath = join(agentsCommandsDir, `${commandName}.md`);
 
@@ -103,18 +97,7 @@ export async function installCommandAsSymlink(
     await mkdir(targetParent, { recursive: true });
     await rm(targetPath, { force: true });
     await symlink(relative(targetParent, sourceStorePath), targetPath);
-
-    return {
-      success: true,
-      path: targetPath,
-    };
-  } catch (error) {
-    return {
-      success: false,
-      path: targetPath,
-      error: error instanceof Error ? error.message : "Unknown error",
-    };
-  }
+  }, targetPath);
 }
 
 export async function checkSkillInstalled(skillDir: string): Promise<boolean> {

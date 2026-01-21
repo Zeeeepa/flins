@@ -20,16 +20,9 @@ export interface StateFile {
   skills: Record<string, SkillEntry>;
 }
 
-export interface LocalSkillEntry {
-  url: string;
-  subpath?: string;
-  branch: string;
-  commit: string;
-}
-
 export interface LocalState {
   version: string;
-  skills: Record<string, LocalSkillEntry>;
+  skills: Record<string, SkillEntry>;
 }
 
 export interface Dirent {

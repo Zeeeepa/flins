@@ -1,9 +1,9 @@
 import { readdir, readFile } from "fs/promises";
 import { join, extname } from "path";
 import type { Command } from "@/types/commands";
+import { SKIP_DIRS } from "@/utils/discovery";
 import { parseMarkdownCommand } from "./parser";
 
-const SKIP_DIRS = ["node_modules", ".git", "dist", "build", "__pycache__"];
 const SKIP_FILES = new Set(["README.md", "readme.md", ".DS_Store"]);
 const MAX_DEPTH = 5;
 

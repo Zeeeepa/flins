@@ -12,7 +12,7 @@ import type { InstallableType } from "@/types/skills";
 import { agents } from "@/core/agents/config";
 import { isValidInstallation } from "@/utils/validation";
 import { resolveInstallationPath } from "@/utils/paths";
-import { showNoSkillsMessage, Plural } from "@/utils/formatting";
+import { showNoSkillsMessage, plural } from "@/utils/formatting";
 import { removeSymlinkSource } from "@/infrastructure/file-system";
 
 interface RemoveResult {
@@ -140,7 +140,7 @@ export async function performRemove(
         label: skillName,
         hint:
           validInstallations.length > 0
-            ? `${validInstallations.length} ${Plural(validInstallations.length, "installation")}`
+            ? `${validInstallations.length} ${plural(validInstallations.length, "installation")}`
             : "no valid installations",
       };
     });
@@ -236,7 +236,7 @@ export async function performRemove(
     const removeChoices = toRemove.map(({ skillName, installations }) => ({
       value: skillName,
       label: skillName,
-      hint: `${installations.length} ${Plural(installations.length, "installation")}`,
+      hint: `${installations.length} ${plural(installations.length, "installation")}`,
     }));
 
     const selected = await p.multiselect({
@@ -328,12 +328,12 @@ export async function performRemove(
     p.log.success(pc.green(`Removed successfully`));
     for (const r of successful) {
       p.log.message(`  ${pc.green("✓")} ${pc.cyan(r.skillName)}`);
-      p.log.message(`    ${pc.dim(`${r.removed} ${Plural(r.removed, "installation")} removed`)}`);
+      p.log.message(`    ${pc.dim(`${r.removed} ${plural(r.removed, "installation")} removed`)}`);
     }
   }
 
   if (failed.length > 0) {
-    p.log.error(pc.red(`Failed to remove ${failed.length} ${Plural(failed.length, "skill")}`));
+    p.log.error(pc.red(`Failed to remove ${failed.length} ${plural(failed.length, "skill")}`));
     for (const r of failed) {
       p.log.message(`  ${pc.red("✗")} ${pc.cyan(r.skillName)}`);
       for (const inst of r.installations.filter((i) => !i.removed)) {

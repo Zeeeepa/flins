@@ -16,6 +16,6 @@ export function showNoSkillsMessage(): void {
   p.log.message(`    ${pc.cyan("npx flins@latest search")}            # Browse available skills`);
 }
 
-export const Plural = (count: number, singular: string, plural?: string): string => {
+export const plural = (count: number, singular: string, plural?: string): string => {
   return count === 1 ? singular : (plural ?? `${singular}s`);
 };

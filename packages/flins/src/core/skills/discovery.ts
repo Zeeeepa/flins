@@ -2,9 +2,8 @@ import { readdir, readFile, stat } from "fs/promises";
 import { join } from "path";
 import type { Skill } from "@/types/skills";
 import { agents } from "../agents/config";
+import { SKIP_DIRS } from "@/utils/discovery";
 import { parseSkillMd } from "./parser";
-
-const SKIP_DIRS = ["node_modules", ".git", "dist", "build", "__pycache__"];
 
 const COMMON_SKILL_DIRS = ["skills", "skills/.curated", "skills/.experimental", "skills/.system"];
 

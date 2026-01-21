@@ -29,7 +29,7 @@ import type { InstallableType } from "@/types/skills";
 import { agents } from "@/core/agents/config";
 import { isValidInstallation } from "@/utils/validation";
 import { resolveInstallationPath } from "@/utils/paths";
-import { showNoSkillsMessage, Plural } from "@/utils/formatting";
+import { showNoSkillsMessage, plural } from "@/utils/formatting";
 
 interface StatusResult {
   skillName: string;
@@ -413,13 +413,13 @@ export async function performUpdate(
     p.log.success(pc.green(`Updated successfully`));
     for (const r of successful) {
       p.log.message(
-        `  ${pc.green("✓")} ${pc.cyan(r.skillName)} (${r.updated} ${Plural(r.updated, "installation")})`,
+        `  ${pc.green("✓")} ${pc.cyan(r.skillName)} (${r.updated} ${plural(r.updated, "installation")})`,
       );
     }
   }
 
   if (failed.length > 0) {
-    p.log.error(pc.red(`Failed to update ${failed.length} ${Plural(failed.length, "skill")}`));
+    p.log.error(pc.red(`Failed to update ${failed.length} ${plural(failed.length, "skill")}`));
     for (const r of failed) {
       p.log.message(`  ${pc.red("✗")} ${pc.cyan(r.skillName)}`);
       if (r.error) {
@@ -470,7 +470,7 @@ export async function displayStatus(
       const installationCount = validInstallations.length;
       const countSuffix =
         installationCount > 0
-          ? ` (${installationCount} ${Plural(installationCount, "installation")})`
+          ? ` (${installationCount} ${plural(installationCount, "installation")})`
           : "";
       p.log.message(
         `${statusIcon} ${pc.cyan(result.installableType + ":" + result.skillName)}${pc.dim(countSuffix)} - ${statusText}`,

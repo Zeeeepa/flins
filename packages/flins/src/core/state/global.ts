@@ -1,10 +1,9 @@
 import { join } from "path";
-import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync, lstatSync } from "fs";
-import { expandHomeDir, getFlinsHomeDir } from "@/utils/paths";
-import type { StateFile, SkillEntry, SkillInstallation, Dirent } from "@/types/state";
-import type { AgentType } from "@/types/agents";
+import { existsSync, readFileSync, writeFileSync, mkdirSync } from "fs";
+import { getFlinsHomeDir } from "@/utils/paths";
+import type { StateFile, SkillEntry } from "@/types/state";
 import type { InstallableType } from "@/types/skills";
-import { agents } from "@/core/agents/config";
+import { skillKey, commandKey, findInstallations } from "@/utils/state";
 
 const STATE_DIR = getFlinsHomeDir();
 const STATE_FILE = join(STATE_DIR, "skills.lock");
@@ -53,44 +52,32 @@ export function addSkill(
   installableType: InstallableType = "skill",
 ): { updated: boolean; previousBranch?: string } {
   const state = loadState();
-  const key =
-    installableType === "skill"
-      ? `skill:${skillName.toLowerCase()}`
-      : `command:${skillName.toLowerCase()}`;
+  const key = installableType === "skill" ? skillKey(skillName) : commandKey(skillName);
+  const existing = state.skills[key];
 
   let updated = false;
   let previousBranch: string | undefined;
 
-  if (!state.skills[key]) {
-    state.skills[key] = {
-      url,
-      subpath,
-      branch,
-      commit,
-    };
-  } else {
-    if (state.skills[key].branch !== branch) {
-      previousBranch = state.skills[key].branch;
-      state.skills[key].branch = branch;
-      state.skills[key].commit = commit;
-      updated = true;
-    }
-    state.skills[key].url = url;
-    if (subpath) {
-      state.skills[key].subpath = subpath;
-    }
+  if (existing && existing.branch !== branch) {
+    previousBranch = existing.branch;
+    updated = true;
   }
 
+  const entry: SkillEntry = {
+    url,
+    subpath,
+    branch,
+    commit,
+  };
+
+  state.skills[key] = entry;
   saveState(state);
   return { updated, previousBranch };
 }
 
 export function removeSkill(skillName: string, installableType: InstallableType): void {
   const state = loadState();
-  const key =
-    installableType === "skill"
-      ? `skill:${skillName.toLowerCase()}`
-      : `command:${skillName.toLowerCase()}`;
+  const key = installableType === "skill" ? skillKey(skillName) : commandKey(skillName);
 
   delete state.skills[key];
   saveState(state);
@@ -102,10 +89,7 @@ export function updateSkillCommit(
   commit: string,
 ): void {
   const state = loadState();
-  const key =
-    installableType === "skill"
-      ? `skill:${skillName.toLowerCase()}`
-      : `command:${skillName.toLowerCase()}`;
+  const key = installableType === "skill" ? skillKey(skillName) : commandKey(skillName);
 
   if (state.skills[key]) {
     state.skills[key].commit = commit;
@@ -118,10 +102,7 @@ export function getSkillEntry(
   installableType: InstallableType,
 ): SkillEntry | null {
   const state = loadState();
-  const key =
-    installableType === "skill"
-      ? `skill:${skillName.toLowerCase()}`
-      : `command:${skillName.toLowerCase()}`;
+  const key = installableType === "skill" ? skillKey(skillName) : commandKey(skillName);
 
   return state.skills[key] || null;
 }
@@ -130,72 +111,8 @@ export function getAllSkills(): StateFile {
   return loadState();
 }
 
-export function findGlobalSkillInstallations(
-  skillName: string,
-  installableType: InstallableType,
-): SkillInstallation[] {
-  const installations: SkillInstallation[] = [];
-
-  for (const [agentType, agentConfig] of Object.entries(agents)) {
-    if (installableType === "skill") {
-      const globalSkillsDirPath = expandHomeDir(agentConfig.globalSkillsDir);
-
-      if (existsSync(globalSkillsDirPath)) {
-        try {
-          const entries = readdirSync(globalSkillsDirPath, { withFileTypes: true }) as Dirent[];
-          const matchingEntry = entries.find((e) => {
-            if (e.name.toLowerCase() !== skillName.toLowerCase()) {
-              return false;
-            }
-            if (e.isDirectory()) {
-              return true;
-            }
-            const fullPath = join(globalSkillsDirPath, e.name);
-            try {
-              return lstatSync(fullPath).isSymbolicLink();
-            } catch {
-              return false;
-            }
-          });
-
-          if (matchingEntry) {
-            installations.push({
-              agent: agentType as AgentType,
-              installableType: "skill",
-              type: "global",
-              path: join(agentConfig.globalSkillsDir, matchingEntry.name),
-            });
-          }
-        } catch {}
-      }
-    } else {
-      const globalCommandsDir = agentConfig.globalCommandsDir;
-      if (globalCommandsDir) {
-        const globalCommandsDirPath = expandHomeDir(globalCommandsDir);
-
-        if (existsSync(globalCommandsDirPath)) {
-          try {
-            const entries = readdirSync(globalCommandsDirPath, { withFileTypes: true }) as Dirent[];
-            const matchingEntry = entries.find((e) => {
-              const baseName = e.name.replace(/\.md$/, "");
-              return baseName.toLowerCase() === skillName.toLowerCase();
-            });
-
-            if (matchingEntry) {
-              installations.push({
-                agent: agentType as AgentType,
-                installableType: "command",
-                type: "global",
-                path: join(globalCommandsDir!, matchingEntry.name),
-              });
-            }
-          } catch {}
-        }
-      }
-    }
-  }
-
-  return installations;
+export function findGlobalSkillInstallations(skillName: string, installableType: InstallableType) {
+  return findInstallations(skillName, installableType, { type: "global" });
 }
 
 export async function cleanOrphanedEntries(): Promise<void> {
@@ -222,17 +139,4 @@ export async function cleanOrphanedEntries(): Promise<void> {
   if (orphanedKeys.length > 0) {
     saveState(state);
   }
-}
-
-export function getStateDir(): string {
-  ensureStateDir();
-  return STATE_DIR;
-}
-
-export function getCacheDir(): string {
-  const cacheDir = join(STATE_DIR, "cache");
-  if (!existsSync(cacheDir)) {
-    mkdirSync(cacheDir, { recursive: true });
-  }
-  return cacheDir;
 }
