@@ -75,5 +75,15 @@
     "tags": [
       "elysia"
     ]
+  },
+  {
+    "name": "remotion",
+    "source": "https://github.com/remotion-dev/skills",
+    "description": "Official AI agent skills from the Remotion team for building programmatic videos with React",
+    "author": "remotion-dev",
+    "tags": [
+      "remotion",
+      "video"
+    ]
   }
 ]
