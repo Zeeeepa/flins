@@ -1,6 +1,6 @@
 import * as p from "@clack/prompts";
 import pc from "picocolors";
-import { listDirectory, type DirectoryEntry } from "@/services/directory";
+import { listDirectory } from "@/services/directory";
 
 export async function searchCommand() {
   p.intro(pc.bgCyan(pc.black(" flins ")));
@@ -33,28 +33,36 @@ export async function searchCommand() {
       return;
     }
 
-    const selectedName = Array.isArray(selected) && selected.length > 0 ? selected[0] : selected;
-    if (!selectedName) {
+    const selectedNames = Array.isArray(selected) ? selected : [selected];
+    if (selectedNames.length === 0) {
       p.cancel("No selection made");
       return;
     }
 
-    const entry = entries.find((e) => e.name === selectedName);
-    if (!entry) return;
+    const selectedEntries = entries.filter((e) => selectedNames.includes(e.name));
+    if (selectedEntries.length === 0) return;
 
-    showEntryDetails(entry);
+    p.log.step(pc.bold("Selected Skills"));
+    for (const entry of selectedEntries) {
+      p.log.message(`  ${pc.cyan(entry.name)} ${pc.dim(`- ${entry.author}`)}`);
+    }
 
     const install = await p.confirm({
-      message: "Add this skill?",
+      message: `Add ${selectedEntries.length} skill${selectedEntries.length > 1 ? "s" : ""}?`,
     });
 
     if (p.isCancel(install) || !install) {
-      p.outro("Install anytime with " + pc.green(`flins add ${entry.name}`));
+      p.outro(
+        "Install anytime with:\n" +
+          selectedEntries.map((e) => `  ${pc.green(`flins add ${e.name}`)}`).join("\n"),
+      );
       return;
     }
 
     const { installCommand } = await import("@/cli/commands/install");
-    await installCommand(entry.name, {});
+    for (const entry of selectedEntries) {
+      await installCommand(entry.name, { yes: true });
+    }
   } catch (error) {
     p.log.error(
       error instanceof Error
@@ -66,17 +74,4 @@ export async function searchCommand() {
   }
 }
 
-function showEntryDetails(entry: DirectoryEntry) {
-  p.log.step(pc.bold("Skill Details"));
 
-  p.log.message(`${pc.cyan(entry.name)}`);
-  p.log.message(`  ${pc.dim(entry.description)}`);
-
-  if (entry.tags.length > 0) {
-    p.log.message(`  ${pc.bold("Tags:")} ${entry.tags.map((t) => pc.green(t)).join(", ")}`);
-  }
-
-  p.log.message(`  ${pc.bold("Author:")} ${pc.yellow(entry.author)}`);
-  p.log.message(`  ${pc.bold("Source:")} ${pc.dim(entry.source)}`);
-  p.log.message(`  ${pc.dim("Install with:")} ${pc.green(`flins add ${entry.name}`)}`);
-}
