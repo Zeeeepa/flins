@@ -1,6 +1,6 @@
 import * as p from "@clack/prompts";
 import pc from "picocolors";
-import { parseSource } from "@/core/git/parser";
+import { parseSource, buildFileUrl } from "@/core/git/parser";
 import { cloneRepo, cleanupTempDir, getCommitHash } from "@/infrastructure/git-client";
 import { discoverSkills } from "@/core/skills/discovery";
 import { discoverCommands } from "@/core/commands/discovery";
@@ -44,6 +44,7 @@ interface InstallResult {
     agent: string;
     success: boolean;
     path: string;
+    sourceUrl?: string;
     error?: string;
   }>;
 }
@@ -167,6 +168,7 @@ export async function performInstallation(
       commit,
       branch,
       options.symlink ?? true,
+      context.tempDir!,
     );
     context.spinner.stop("Installation complete");
 
@@ -567,6 +569,7 @@ async function performParallelInstall(
   commit: string,
   branch: string,
   symlink: boolean,
+  tempDir: string,
 ): Promise<InstallResult> {
   const installPromises = [
     ...selectedSkills.flatMap((skill) =>
@@ -599,10 +602,14 @@ async function performParallelInstall(
       ? getSkillDisplayName(item as Skill)
       : getCommandDisplayName(item as Command);
 
+    const filePath = isSkill ? `${item.path}/SKILL.md` : item.path;
+    const sourceUrl = buildFileUrl(parsed, tempDir, filePath);
+
     return {
       skill: name,
       agent: agents[agent].displayName,
       ...result,
+      sourceUrl,
       installableType: isSkill ? "skill" : "command",
     };
   });

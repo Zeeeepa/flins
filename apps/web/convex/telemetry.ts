@@ -13,6 +13,7 @@ const eventValidator = {
   ),
   type: v.optional(v.union(v.literal("skill"), v.literal("command"))),
   repo: v.optional(v.string()),
+  sourceUrl: v.optional(v.string()),
   name: v.optional(v.string()),
   skill: v.optional(v.string()),
   agent: v.optional(v.string()),

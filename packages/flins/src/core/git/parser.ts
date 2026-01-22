@@ -1,5 +1,28 @@
 import type { ParsedSource } from "@/types/skills";
 
+export function buildFileUrl(
+  parsed: ParsedSource,
+  tempDir: string,
+  filePath: string,
+): string {
+  const baseUrl = parsed.url.replace(/\.git$/, "");
+  const branch = parsed.branch ?? "main";
+
+  const relativePath = filePath.startsWith(tempDir)
+    ? filePath.slice(tempDir.length).replace(/^\//, "")
+    : filePath;
+
+  if (parsed.type === "github") {
+    return `${baseUrl}/blob/${branch}/${relativePath}`;
+  }
+
+  if (parsed.type === "gitlab") {
+    return `${baseUrl}/-/blob/${branch}/${relativePath}`;
+  }
+
+  return parsed.url;
+}
+
 export function parseSource(input: string): ParsedSource {
   const githubTreeMatch = input.match(/github\.com\/([^/]+)\/([^/]+)\/tree\/([^/]+)(?:\/(.+))?$/);
   if (githubTreeMatch) {

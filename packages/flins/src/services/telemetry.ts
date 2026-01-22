@@ -24,6 +24,7 @@ export interface TelemetryEvent {
   command: Command;
   type?: "skill" | "command";
   repo?: string;
+  sourceUrl?: string;
   name?: string;
   agent?: string;
   scope?: "global" | "project";

@@ -14,6 +14,7 @@ export default defineSchema({
     ),
     type: v.optional(v.union(v.literal("skill"), v.literal("command"))),
     repo: v.optional(v.string()),
+    sourceUrl: v.optional(v.string()),
     name: v.optional(v.string()),
     skill: v.optional(v.string()),
     agent: v.optional(v.string()),
@@ -29,6 +30,7 @@ export default defineSchema({
     .index("by_type", ["type"])
     .index("by_repo", ["repo"])
     .index("by_name", ["name"])
+    .index("by_source_url", ["sourceUrl"])
     .index("by_timestamp", ["timestamp"])
     .index("by_cli_version", ["cliVersion"]),
 });

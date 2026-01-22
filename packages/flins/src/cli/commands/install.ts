@@ -49,10 +49,12 @@ export async function installCommand(source: string, options: InstallOptions) {
 
     for (const r of result.results) {
       const installableType = (r as { installableType?: "skill" | "command" }).installableType;
+      const sourceUrl = (r as { sourceUrl?: string }).sourceUrl;
       track({
         command: "add",
         type: installableType,
         repo: resolvedSource,
+        sourceUrl,
         name: r.skill,
         agent: r.agent,
         scope: options.global ? "global" : "project",
