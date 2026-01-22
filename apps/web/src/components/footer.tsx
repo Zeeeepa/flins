@@ -12,7 +12,7 @@ const Footer = () => {
           <div className="flex flex-col gap-1">
             <Link to="/">flins</Link>
             <p className="text-muted-foreground text-sm">
-              Universal skill and command manager for AI coding agents
+              The universal skill manager for AI coding agents
             </p>
           </div>
           <a

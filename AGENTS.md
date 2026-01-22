@@ -75,6 +75,17 @@ Rules:
 - **Skill(clack-guidelines)**
   Required for interactive CLI behavior: prompts, confirmations, selections, spinners, progress, autocomplete.
 
+**Marketing & SEO**
+
+- **Skill(copy-editing)**
+  Required for editing, reviewing, or improving existing marketing copy.
+- **Skill(copywriting)**
+  Required for writing new marketing copy from scratch.
+- **Skill(programmatic-seo)**
+  Required for building SEO pages at scale using templates and data.
+- **Skill(seo-audit)**
+  Required for auditing, reviewing, or diagnosing SEO issues.
+
 **Convex**
 
 - **Skill(Convex Functions)**

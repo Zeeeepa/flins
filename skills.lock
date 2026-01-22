@@ -75,6 +75,26 @@
       "url": "https://github.com/waynesutton/convexskills.git",
       "branch": "main",
       "commit": "1982d5f943ee49c862748823e25df2ed6c2c45bf"
+    },
+    "skill:copy-editing": {
+      "url": "https://github.com/coreyhaines31/marketingskills.git",
+      "branch": "main",
+      "commit": "96fa94e8b79d08010ddc67ed1a70f677feff2027"
+    },
+    "skill:copywriting": {
+      "url": "https://github.com/coreyhaines31/marketingskills.git",
+      "branch": "main",
+      "commit": "96fa94e8b79d08010ddc67ed1a70f677feff2027"
+    },
+    "skill:programmatic-seo": {
+      "url": "https://github.com/coreyhaines31/marketingskills.git",
+      "branch": "main",
+      "commit": "96fa94e8b79d08010ddc67ed1a70f677feff2027"
+    },
+    "skill:seo-audit": {
+      "url": "https://github.com/coreyhaines31/marketingskills.git",
+      "branch": "main",
+      "commit": "96fa94e8b79d08010ddc67ed1a70f677feff2027"
     }
   }
 }

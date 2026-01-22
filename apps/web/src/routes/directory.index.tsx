@@ -73,23 +73,23 @@ export const Route = createFileRoute('/directory/')({
     meta: [
       {
         title:
-          'Skills Directory · Agent Skills for Claude, Cursor, Copilot, and 13 more',
+          'Skills Directory: Agent skills for Claude, Cursor, Copilot, and more',
       },
       {
         name: 'description',
         content:
-          'Browse the official directory of AI agent skills. Find and install skills for Claude Code, Cursor, Copilot, Windsurf, Gemini CLI, and 11 more AI coding tools via the flins CLI.',
+          'Browse and install AI agent skills. Works with Claude Code, Cursor, Copilot, Windsurf, Gemini CLI, and 10+ other AI dev tools.',
       },
       // Open Graph
       {
         property: 'og:title',
         content:
-          'Skills Directory · Agent Skills for Claude, Cursor, Copilot, and 13 more',
+          'Skills Directory: Agent skills for Claude, Cursor, Copilot, and more',
       },
       {
         property: 'og:description',
         content:
-          'Browse the official directory of AI agent skills. Find and install skills for Claude Code, Cursor, Copilot, Windsurf, Gemini CLI, and 11 more AI coding tools via the flins CLI.',
+          'Browse and install AI agent skills. Works with Claude Code, Cursor, Copilot, Windsurf, Gemini CLI, and 10+ other AI dev tools.',
       },
       { property: 'og:type', content: 'website' },
       { property: 'og:url', content: 'https://flins.tech' },
@@ -100,12 +100,12 @@ export const Route = createFileRoute('/directory/')({
       {
         name: 'twitter:title',
         content:
-          'Skills Directory · Agent Skills for Claude, Cursor, Copilot, and 13 more',
+          'Skills Directory: Agent skills for Claude, Cursor, Copilot, and more',
       },
       {
         name: 'twitter:description',
         content:
-          'Browse the official directory of AI agent skills. Find and install skills for Claude Code, Cursor, Copilot, Windsurf, Gemini CLI, and 11 more AI coding tools via the flins CLI.',
+          'Browse and install AI agent skills. Works with Claude Code, Cursor, Copilot, Windsurf, Gemini CLI, and 10+ other AI dev tools.',
       },
       { name: 'twitter:image', content: 'https://flins.tech/og.png' },
       { name: 'author', content: 'flinstech' },
@@ -114,7 +114,7 @@ export const Route = createFileRoute('/directory/')({
     links: [
       {
         rel: 'canonical',
-        href: 'https://flins.tech',
+        href: 'https://flins.tech/directory',
       },
     ],
     scripts: [
@@ -125,7 +125,7 @@ export const Route = createFileRoute('/directory/')({
           '@type': 'SoftwareApplication',
           name: 'flins',
           description:
-            'Browse the official directory of AI agent skills for flins. Install skills for Claude Code, Cursor, Copilot, Windsurf, Gemini CLI, and 11 more AI coding tools from one unified CLI.',
+            'Browse and install AI agent skills. Works with Claude Code, Cursor, Copilot, Windsurf, Gemini CLI, and 10+ other AI dev tools.',
           url: 'https://flins.tech',
           applicationCategory: 'DeveloperApplication',
           operatingSystem: 'macOS, Linux, Windows',
@@ -213,11 +213,10 @@ function App() {
 
           <div className="p-8">
             <h1 className="text-4xl">
-              Browse Skills Directory
+              Skills Directory
             </h1>
             <p className="text-zinc-400 max-w-2xl mt-1 mb-4">
-              Discover and install curated skills for your AI development
-              workflow
+              Browse and install curated skills for your AI dev workflow
             </p>
 
             <InputGroup className="h-12 px-2 gap-2">
@@ -236,6 +235,14 @@ function App() {
                 <SearchIcon aria-hidden="true" />
               </InputGroupAddon>
             </InputGroup>
+          </div>
+
+          <div className="px-8 pb-8">
+            <p className="text-sm text-zinc-400 mb-3">
+              Don't see your skill? Run command below and
+              it'll automatically show up here.
+            </p>
+            <CodeBlockCommand skill="<user>/<repo>" />
           </div>
 
           {allSkills.length > 0 ? (
@@ -287,7 +294,7 @@ function App() {
                   </EmptyMedia>
                   <EmptyTitle>No skills found</EmptyTitle>
                   <EmptyDescription>
-                    Try adjusting your search
+                    Try a different search term
                   </EmptyDescription>
                 </EmptyHeader>
                 <EmptyContent>

@@ -59,23 +59,23 @@ export const Route = createFileRoute('/')({
     meta: [
       {
         title:
-          'flins · Universal skill and command manager for AI coding agents',
+          'flins: The universal skill manager for AI coding agents',
       },
       {
         name: 'description',
         content:
-          'Install and manage AI agent skills from one CLI. flins works with Claude Code, Cursor, Copilot, Windsurf, Gemini CLI, and 11 more AI coding tools. Browse the official skills directory.',
+          'Install and manage AI agent skills from one CLI. Works with Claude Code, Cursor, Copilot, Windsurf, Gemini CLI, and 10+ other AI dev tools.',
       },
       // Open Graph
       {
         property: 'og:title',
         content:
-          'flins · Universal skill and command manager for AI coding agents',
+          'flins: The universal skill manager for AI coding agents',
       },
       {
         property: 'og:description',
         content:
-          'Install and manage AI agent skills from one CLI. flins works with Claude Code, Cursor, Copilot, Windsurf, Gemini CLI, and 11 more AI coding tools. Browse the official skills directory.',
+          'Install and manage AI agent skills from one CLI. Works with Claude Code, Cursor, Copilot, Windsurf, Gemini CLI, and 10+ other AI dev tools.',
       },
       { property: 'og:type', content: 'website' },
       { property: 'og:url', content: 'https://flins.tech' },
@@ -86,12 +86,12 @@ export const Route = createFileRoute('/')({
       {
         name: 'twitter:title',
         content:
-          'flins · Universal skill and command manager for AI coding agents',
+          'flins: The universal skill manager for AI coding agents',
       },
       {
         name: 'twitter:description',
         content:
-          'Install and manage AI agent skills from one CLI. flins works with Claude Code, Cursor, Copilot, Windsurf, Gemini CLI, and 11 more AI coding tools. Browse the official skills directory.',
+          'Install and manage AI agent skills from one CLI. Works with Claude Code, Cursor, Copilot, Windsurf, Gemini CLI, and 10+ other AI dev tools.',
       },
       { name: 'twitter:image', content: 'https://flins.tech/og.png' },
       { name: 'author', content: 'flinstech' },
@@ -111,7 +111,7 @@ export const Route = createFileRoute('/')({
           '@type': 'SoftwareApplication',
           name: 'flins',
           description:
-            'flins · Universal agent skills manager for AI coding tools. Install and manage skills for Claude Code, Cursor, Copilot, Windsurf, Gemini CLI, and 11 more from one unified CLI. Browse the official skills directory.',
+            'The universal skill manager for AI coding agents. Install and manage skills for Claude Code, Cursor, Copilot, Windsurf, Gemini CLI, and 10+ other AI dev tools from one CLI.',
           url: 'https://flins.tech',
           applicationCategory: 'DeveloperApplication',
           operatingSystem: 'macOS, Linux, Windows',
@@ -186,7 +186,7 @@ function App() {
               </h1>
               <p className="text-xl text-zinc-400 max-w-2xl">
                 The universal skill manager for Claude Code, Cursor, Windsurf,
-                Copilot, and 10+ more AI development tools.
+                Copilot, and 10+ other AI dev tools.
               </p>
             </div>
             <div className="flex flex-wrap gap-4 max-w-xl">
@@ -209,11 +209,10 @@ function App() {
         <div className="max-w-7xl mx-auto border-x flex flex-col relative">
           <div className="grid lg:grid-cols-2 items-center">
             <div className="flex flex-col items-start gap-6 p-8">
-              <h2 className="text-5xl">Familiar CLI, right out of the box</h2>
+              <h2 className="text-5xl">Works like your package manager</h2>
               <p className="text-muted-foreground text-lg text-balance leading-relaxed">
                 Treat skills like dependencies. Add, update, and remove them
-                using the same commands you already know from your favorite
-                package managers.
+                with the same commands you already know.
               </p>
               <Button
                 size="xl"
@@ -296,8 +295,8 @@ function App() {
             <div className="flex lg:order-2 order-1 flex-col items-start gap-6 p-8">
               <h2 className="text-5xl">Official skills from teams you trust</h2>
               <p className="text-muted-foreground text-lg text-balance leading-relaxed">
-                Browse our curated directory of official skills from leading
-                companies and trusted developers in the ecosystem.
+                A curated directory of official skills from leading companies
+                and trusted developers.
               </p>
               <div className="flex items-center gap-2">
                 <Button size="xl" render={<Link to="/directory" />}>
@@ -331,8 +330,8 @@ function App() {
               <h2 className="text-5xl">Install from any git repository</h2>
               <p className="text-muted-foreground text-lg text-balance leading-relaxed">
                 Pull skills directly from GitHub, GitLab, Codeberg, or any
-                git-hosted URL. Just like your favorite package managers, flins
-                gives you the flexibility to install from anywhere.
+                git-hosted URL. Install from anywhere, just like your favorite
+                package manager.
               </p>
               <Button
                 size="xl"
@@ -440,14 +439,14 @@ function App() {
               </p>
               <ul className="text-muted-foreground space-y-2">
                 <li className="flex items-center gap-2">
-                  <span className="text-emerald-400">✓</span> Single source of
+                  <span className="text-emerald-400">+</span> Single source of
                   truth
                 </li>
                 <li className="flex items-center gap-2">
-                  <span className="text-emerald-400">✓</span> No duplicate files
+                  <span className="text-emerald-400">+</span> No duplicate files
                 </li>
                 <li className="flex items-center gap-2">
-                  <span className="text-emerald-400">✓</span> Easier maintenance
+                  <span className="text-emerald-400">+</span> Easier maintenance
                 </li>
               </ul>
             </div>
@@ -463,7 +462,7 @@ function App() {
             <div className="space-y-4">
               <h2 className="text-4xl">Get started</h2>
               <p className="text-muted-foreground text-lg max-w-2xl">
-                Install flins and add your first skill
+                Install flins and add your first skill in seconds
               </p>
             </div>
             <div className="w-full max-w-md">
