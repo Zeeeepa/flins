@@ -99,5 +99,14 @@
       "analytics",
       "growth"
     ]
+  },
+  {
+    "name": "supabase",
+    "source": "https://github.com/supabase/agent-skills",
+    "description": "Postgres performance optimization guidelines from Supabase. Contains rules across 8 categories covering query performance, connection management, schema design, concurrency, RLS, and monitoring",
+    "author": "supabase",
+    "tags": [
+      "postgresql"
+    ]
   }
 ]
