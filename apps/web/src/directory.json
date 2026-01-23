@@ -11,12 +11,14 @@
   },
   {
     "name": "cloudflare",
-    "source": "https://github.com/dmmulroy/cloudflare-skill",
-    "description": "Comprehensive Cloudflare platform reference docs for AI/LLM consumption. Covers Workers, Pages, storage (KV, D1, R2), AI (Workers AI, Vectorize, Agents SDK), networking, security, and infrastructure-as-code",
-    "author": "dmmulroy",
+    "source": "https://github.com/cloudflare/skills",
+    "description": "Official AI agent skills from Cloudflare for building on Workers, Durable Objects, Agents SDK, and MCP servers. Covers deployment with Wrangler, stateful agents, WebSockets, RPC, SQLite, and web performance auditing",
+    "author": "cloudflare",
     "tags": [
       "cloudflare",
-      "workers"
+      "workers",
+      "mcp",
+      "durable-objects"
     ]
   },
   {
