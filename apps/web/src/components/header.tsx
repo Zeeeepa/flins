@@ -5,6 +5,7 @@ import { Button } from './ui/button'
 import logo from '../logo.svg'
 import { ArrowUpRightIcon, MenuIcon } from 'lucide-react'
 import { useState } from 'react'
+import { cn } from '@/lib/utils'
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -18,7 +19,7 @@ const Header = () => {
             flins
           </Link>
           <nav aria-label="Main navigation" className="flex items-center">
-            {isOpen && <div className="flex sm:items-center sm:static border-b sm:border-b-0 inset-x-0 absolute top-full sm:flex-row flex-col bg-background divide-y sm:divide-y-0">
+            <div className={cn("flex sm:items-center sm:static border-b sm:border-b-0 inset-x-0 absolute top-full sm:flex-row flex-col bg-background divide-y sm:divide-y-0", isOpen ? "block" : "hidden")}>
               <Button variant="ghost" render={<Link to="/discovery" />}>
                 Discovery
               </Button>
@@ -38,7 +39,7 @@ const Header = () => {
                 Docs
                 <ArrowUpRightIcon aria-hidden="true" />
               </Button>
-            </div>}
+            </div>
             <Button
               variant="ghost"
               size="icon-xl"
