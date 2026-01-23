@@ -482,9 +482,7 @@ function App() {
                 <code className="text-cyan-400">
                   .well-known/skills/index.json
                 </code>{' '}
-                endpoint — including{' '}
-                <code className="text-orange-400">developer.cloudflare.com</code>
-                .
+                endpoint.
               </p>
               <Button
                 size="xl"
