@@ -60,6 +60,8 @@ export const Route = createFileRoute('/discovery/')({
     try {
       const firstPage = await client.query(api.stats.getSkillsPaginated, {
         paginationOpts: { numItems: ITEMS_PER_PAGE, cursor: null },
+        search,
+        featured,
       })
 
       return {
@@ -199,12 +201,14 @@ function App() {
   }) => {
     return convex.query(api.stats.getSkillsPaginated, {
       paginationOpts: { numItems: ITEMS_PER_PAGE, cursor: pageParam },
+      search: searchParams.search,
+      featured: searchParams.featured,
     })
   }
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isPending } =
     useInfiniteQuery({
-      queryKey: ['skills', 'paginated'],
+      queryKey: ['skills', 'paginated', searchParams],
       queryFn: fetchSkillsPage,
       initialPageParam: null,
       getNextPageParam: (lastPage) => lastPage.continueCursor,
@@ -319,7 +323,7 @@ function App() {
             <>
               <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 divide-x divide-y border-y">
                 {allSkills.map((skill) => (
-                  <div key={skill.name} className="p-8">
+                  <div key={skill.repo ? `${skill.repo}/${skill.name}` : skill.name} className="p-8">
                     <div className="flex items-center gap-1">
                       {skill.isFeatured && (
                         <Badge variant="outline">
