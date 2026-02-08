@@ -110,5 +110,19 @@
     "description": "Official Anthropic skills repository. Contains skills for creative applications, technical tasks, enterprise workflows, and document creation (PDF, DOCX, PPTX, XLSX)",
     "author": "anthropics",
     "tags": ["anthropic"]
+  },
+  {
+    "name": "openai",
+    "source": "https://github.com/openai/skills",
+    "description": "Official AI agent skills from OpenAI for Codex. Write once, use everywhere. Skills are folders of instructions, scripts, and resources that AI agents can discover and use to perform specific tasks in a repeatable way",
+    "author": "openai",
+    "tags": ["openai", "codex", "agent-skills"]
+  },
+  {
+    "name": "mastra",
+    "source": "https://github.com/mastra-ai/skills",
+    "description": "Official Mastra agent skills for building AI-powered applications and agents with a modern TypeScript stack. Covers setup, embedded docs lookup, remote docs fetching, troubleshooting, and migrations",
+    "author": "mastra-ai",
+    "tags": ["mastra", "typescript", "agents", "ai-framework"]
   }
 ]
